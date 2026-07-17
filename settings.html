@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pengaturan — WedInvite</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0a1a; --navy-light:#141428; --navy-mid:#1e1e3f;
+  --gold:#c9a96e; --gold-light:#e8d5b0; --gold-bright:#f0d78c;
+  --cream:#faf7f2; --white:#fff; --gray:#8a8a9a; --gray-light:#e8e8ee;
+  --success:#22c55e; --error:#ef4444;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
+
+.topbar { background:var(--navy-light); border-bottom:1px solid rgba(201,169,110,.1); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+.topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; }
+.topbar-back:hover { color:var(--gold); }
+.topbar-back svg { width:20px; height:20px; }
+.topbar-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; }
+
+.container { max-width:600px; margin:0 auto; padding:40px 24px 80px; }
+
+.settings-card { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:20px; padding:28px; margin-bottom:20px; }
+.settings-card-title { font-family:'Playfair Display',serif; font-size:18px; font-weight:600; margin-bottom:20px; color:var(--gold); }
+
+.form-group { margin-bottom:20px; }
+.form-label { display:block; font-size:13px; font-weight:600; color:var(--white); margin-bottom:8px; }
+.form-input { width:100%; padding:14px 16px; background:var(--navy); border:1.5px solid rgba(255,255,255,.1); border-radius:12px; font-size:14px; color:var(--white); font-family:'Inter',sans-serif; transition:all .3s; }
+.form-input:focus { outline:none; border-color:var(--gold); }
+.form-input::placeholder { color:var(--gray); }
+
+.toggle-row { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+.toggle-row:last-child { border-bottom:none; }
+.toggle-label { font-size:14px; color:var(--white); }
+.toggle-desc { font-size:12px; color:var(--gray); margin-top:2px; }
+.toggle-switch { width:48px; height:26px; background:rgba(255,255,255,.1); border-radius:13px; position:relative; cursor:pointer; transition:all .3s; }
+.toggle-switch.active { background:var(--gold); }
+.toggle-switch::after { content:''; position:absolute; top:3px; left:3px; width:20px; height:20px; background:var(--white); border-radius:50%; transition:all .3s; }
+.toggle-switch.active::after { left:25px; }
+
+.btn-save { width:100%; padding:16px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; margin-top:8px; }
+.btn-save:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+
+.danger-zone { border-color:rgba(239,68,68,.2); }
+.danger-zone .settings-card-title { color:var(--error); }
+.btn-danger { width:100%; padding:14px; background:transparent; color:var(--error); border:1.5px solid rgba(239,68,68,.3); border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; }
+.btn-danger:hover { background:rgba(239,68,68,.1); }
+
+.toast { position:fixed; top:80px; left:50%; transform:translateX(-50%) translateY(-100px); background:var(--navy-light); color:var(--gold); padding:14px 28px; border-radius:12px; font-size:14px; font-weight:700; z-index:300; opacity:0; transition:all .4s; box-shadow:0 8px 30px rgba(0,0,0,.3); border:1px solid rgba(201,169,110,.2); }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+@media (max-width:640px) {
+  .container { padding:24px 20px 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="editor.html" class="topbar-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Editor
+  </a>
+  <div class="topbar-title">Pengaturan</div>
+</div>
+
+<div class="container">
+  <div class="settings-card">
+    <div class="settings-card-title">Informasi Akun</div>
+    <div class="form-group">
+      <label class="form-label">Nama Lengkap</label>
+      <input type="text" class="form-input" value="Ican Pratama" id="fullName">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-input" value="ican@email.com" id="email">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nomor WhatsApp</label>
+      <input type="tel" class="form-input" value="081234567890" id="phone">
+    </div>
+  </div>
+
+  <div class="settings-card">
+    <div class="settings-card-title">Preferensi Undangan</div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Musik Otomatis</div>
+        <div class="toggle-desc">Putar musik saat undangan dibuka</div>
+      </div>
+      <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">RSVP Publik</div>
+        <div class="toggle-desc">Tamu bisa melihat daftar RSVP</div>
+      </div>
+      <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Amplop Digital</div>
+        <div class="toggle-desc">Tampilkan rekening bank di undangan</div>
+      </div>
+      <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Google Maps</div>
+        <div class="toggle-desc">Tampilkan tombol navigasi Maps</div>
+      </div>
+      <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+    </div>
+  </div>
+
+  <div class="settings-card">
+    <div class="settings-card-title">Notifikasi</div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">RSVP Masuk</div>
+        <div class="toggle-desc">Notifikasi saat ada konfirmasi baru</div>
+      </div>
+      <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Ucapan Baru</div>
+        <div class="toggle-desc">Notifikasi saat ada ucapan baru</div>
+      </div>
+      <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+    </div>
+  </div>
+
+  <div class="settings-card danger-zone">
+    <div class="settings-card-title">Zona Berbahaya</div>
+    <button class="btn-danger" onclick="showToast('⚠️ Fitur ini akan segera hadir')">🗑️ Hapus Undangan</button>
+  </div>
+
+  <button class="btn-save" onclick="saveSettings()">💾 Simpan Perubahan</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+function saveSettings() {
+  showToast('✅ Pengaturan berhasil disimpan!');
+}
+</script>
+
+</body>
+</html>

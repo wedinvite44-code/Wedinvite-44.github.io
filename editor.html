@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Editor Undangan — WedInvite</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0a1a; --navy-light:#141428; --navy-mid:#1e1e3f;
+  --gold:#c9a96e; --gold-light:#e8d5b0; --gold-bright:#f0d78c;
+  --cream:#faf7f2; --white:#fff; --gray:#8a8a9a; --gray-light:#e8e8ee;
+  --success:#22c55e; --error:#ef4444; --warning:#f59e0b;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--navy); min-height:100vh; }
+
+/* ============ EDITOR TOPBAR ============ */
+.ed-topbar { background:rgba(10,10,26,.95); backdrop-filter:blur(20px); padding:12px 24px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; border-bottom:1px solid rgba(201,169,110,.15); }
+.ed-topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; }
+.ed-topbar-back:hover { color:var(--gold); }
+.ed-topbar-back svg { width:20px; height:20px; }
+.ed-topbar-title { font-family:'Playfair Display',serif; font-size:18px; font-weight:600; color:var(--gold); }
+.ed-topbar-actions { display:flex; gap:10px; }
+.ed-topbar-btn { padding:10px 20px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; display:flex; align-items:center; gap:6px; }
+.ed-topbar-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+.ed-topbar-btn.outline { background:transparent; color:var(--white); border:1.5px solid rgba(255,255,255,.15); }
+.ed-topbar-btn.outline:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ============ INVITATION PREVIEW ============ */
+.ed-preview { max-width:480px; margin:0 auto; background:var(--white); min-height:calc(100vh - 130px); position:relative; }
+.ed-section { position:relative; border:2px dashed transparent; transition:all .3s; cursor:pointer; }
+.ed-section:hover { border-color:var(--gold); }
+.ed-section:hover::after { content:'✎ Klik untuk edit'; position:absolute; top:8px; right:8px; background:var(--gold); color:var(--navy); padding:4px 12px; border-radius:6px; font-size:11px; font-weight:700; z-index:10; }
+.ed-section.active { border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,169,110,.2); }
+
+/* ============ OPENING / COVER ============ */
+.ed-opening { height:100vh; background:linear-gradient(180deg, rgba(10,10,26,.6) 0%, rgba(10,10,26,.85) 100%), url('https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80'); background-size:cover; background-position:center; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:var(--white); position:relative; padding:24px; }
+.ed-opening-label { font-size:11px; letter-spacing:5px; text-transform:uppercase; opacity:.7; margin-bottom:20px; font-weight:500; }
+.ed-opening-names { font-family:'Great Vibes',cursive; font-size:52px; color:var(--gold-light); margin-bottom:10px; text-shadow:0 4px 20px rgba(0,0,0,.3); }
+.ed-opening-date { font-size:12px; letter-spacing:3px; text-transform:uppercase; opacity:.8; margin-bottom:40px; font-weight:500; }
+.ed-opening-btn { padding:16px 44px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:50px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; animation:pulse-gold 2.5s infinite; letter-spacing:1px; }
+@keyframes pulse-gold { 0%,100% { box-shadow:0 0 0 0 rgba(201,169,110,.4); } 50% { box-shadow:0 0 25px 10px rgba(201,169,110,.2); } }
+.ed-opening-scroll { position:absolute; bottom:28px; animation:bounce 2s infinite; opacity:.6; }
+@keyframes bounce { 0%,20%,50%,80%,100% { transform:translateY(0); } 40% { transform:translateY(-12px); } 60% { transform:translateY(-6px); } }
+
+/* ============ COUPLE SECTION ============ */
+.ed-couple { padding:70px 24px; text-align:center; background:var(--white); }
+.ed-couple-label { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--gray); margin-bottom:28px; font-weight:600; }
+.ed-couple-photos { display:flex; align-items:center; justify-content:center; gap:28px; margin-bottom:28px; }
+.ed-couple-photo { width:150px; height:150px; border-radius:50%; overflow:hidden; border:4px solid var(--gold); position:relative; background:var(--cream); box-shadow:0 8px 30px rgba(0,0,0,.1); }
+.ed-couple-photo img { width:100%; height:100%; object-fit:cover; }
+.ed-couple-photo-upload { position:absolute; inset:0; background:rgba(10,10,26,.6); display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--white); opacity:0; transition:opacity .3s; cursor:pointer; backdrop-filter:blur(4px); }
+.ed-couple-photo:hover .ed-couple-photo-upload { opacity:1; }
+.ed-couple-photo-upload svg { width:28px; height:28px; margin-bottom:6px; }
+.ed-couple-photo-upload span { font-size:11px; font-weight:600; }
+.ed-couple-and { font-family:'Great Vibes',cursive; font-size:44px; color:var(--gold); }
+.ed-couple-name { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:var(--navy); margin-top:10px; }
+.ed-couple-parents { font-size:13px; color:var(--gray); margin-top:10px; line-height:1.8; }
+
+/* ============ QUOTE SECTION ============ */
+.ed-quote { padding:70px 24px; text-align:center; background:linear-gradient(180deg, #fff9f0 0%, #fff5e6 100%); }
+.ed-quote-divider { width:60px; height:2px; background:linear-gradient(90deg, transparent, var(--gold), transparent); margin:0 auto 28px; }
+.ed-quote-arabic { font-size:20px; color:var(--navy); margin-bottom:24px; line-height:2.4; font-family:'Poppins',sans-serif; }
+.ed-quote-text { font-family:'Cormorant Garamond',serif; font-size:18px; font-style:italic; color:#5c4a3d; line-height:1.9; max-width:420px; margin:0 auto; }
+.ed-quote-ref { font-size:13px; font-weight:700; color:var(--navy); margin-top:24px; letter-spacing:1px; }
+
+/* ============ COUNTDOWN SECTION ============ */
+.ed-countdown { padding:70px 24px; text-align:center; background:linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%); color:var(--white); position:relative; }
+.ed-countdown::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(201,169,110,.3), transparent); }
+.ed-countdown-title { font-family:'Playfair Display',serif; font-size:24px; font-weight:600; color:var(--gold); margin-bottom:36px; letter-spacing:1px; }
+.ed-countdown-grid { display:flex; justify-content:center; gap:20px; }
+.ed-countdown-item { text-align:center; background:rgba(201,169,110,.08); border:1px solid rgba(201,169,110,.15); border-radius:16px; padding:20px 16px; min-width:80px; }
+.ed-countdown-number { font-family:'Playfair Display',serif; font-size:38px; font-weight:700; color:var(--gold); }
+.ed-countdown-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; opacity:.7; margin-top:6px; }
+
+/* ============ EVENT SECTION ============ */
+.ed-event { padding:70px 24px; text-align:center; background:linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%); }
+.ed-event-title { font-family:'Playfair Display',serif; font-size:28px; font-weight:600; color:var(--navy); margin-bottom:10px; }
+.ed-event-subtitle { font-size:14px; color:var(--gray); margin-bottom:36px; }
+.ed-event-card { background:var(--white); border-radius:24px; padding:32px; margin-bottom:20px; text-align:left; box-shadow:0 12px 40px rgba(0,0,0,.06); border:1px solid rgba(201,169,110,.08); }
+.ed-event-card-header { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+.ed-event-card-icon { width:48px; height:48px; background:linear-gradient(135deg, var(--gold-light), rgba(201,169,110,.2)); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+.ed-event-card-title { font-size:13px; font-weight:700; color:var(--gold); letter-spacing:2px; text-transform:uppercase; }
+.ed-event-card-date { font-family:'Playfair Display',serif; font-size:24px; font-weight:600; color:var(--navy); margin-bottom:6px; }
+.ed-event-card-time { font-size:14px; color:var(--gray); margin-bottom:18px; }
+.ed-event-card-venue { font-size:17px; color:var(--navy); font-weight:600; }
+.ed-event-card-address { font-size:13px; color:var(--gray); margin-top:6px; }
+.ed-map-btn { display:inline-flex; align-items:center; gap:8px; margin-top:18px; padding:12px 22px; background:linear-gradient(135deg, #4285f4, #3367d6); color:var(--white); border:none; border-radius:12px; font-size:13px; font-weight:600; cursor:pointer; text-decoration:none; transition:all .3s; }
+.ed-map-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(66,133,244,.3); }
+.ed-map-btn svg { width:16px; height:16px; }
+
+/* ============ GALLERY SECTION ============ */
+.ed-gallery { padding:70px 24px; text-align:center; background:var(--white); }
+.ed-gallery-title { font-family:'Playfair Display',serif; font-size:28px; font-weight:600; color:var(--navy); margin-bottom:10px; }
+.ed-gallery-subtitle { font-size:14px; color:var(--gray); margin-bottom:36px; }
+.ed-gallery-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; }
+.ed-gallery-item { aspect-ratio:1; border-radius:14px; overflow:hidden; position:relative; background:var(--cream); cursor:pointer; }
+.ed-gallery-item img { width:100%; height:100%; object-fit:cover; transition:transform .4s; }
+.ed-gallery-item:hover img { transform:scale(1.08); }
+.ed-gallery-item-upload { position:absolute; inset:0; background:rgba(10,10,26,.5); display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--white); opacity:0; transition:opacity .3s; backdrop-filter:blur(2px); }
+.ed-gallery-item:hover .ed-gallery-item-upload { opacity:1; }
+.ed-gallery-item-upload svg { width:24px; height:24px; margin-bottom:4px; }
+.ed-gallery-item-upload span { font-size:11px; font-weight:600; }
+
+/* ============ RSVP SECTION ============ */
+.ed-rsvp { padding:70px 24px; text-align:center; background:linear-gradient(180deg, #fff9f0 0%, #fff5e6 100%); }
+.ed-rsvp-title { font-family:'Playfair Display',serif; font-size:28px; font-weight:600; color:var(--navy); margin-bottom:10px; }
+.ed-rsvp-desc { font-size:14px; color:var(--gray); margin-bottom:32px; }
+.ed-rsvp-form { max-width:380px; margin:0 auto; text-align:left; }
+.ed-rsvp-input { width:100%; padding:14px 16px; border:2px solid var(--gray-light); border-radius:12px; font-size:14px; font-family:'Inter',sans-serif; margin-bottom:12px; background:var(--white); transition:all .3s; }
+.ed-rsvp-input:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,169,110,.1); }
+.ed-rsvp-btn { width:100%; padding:16px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; letter-spacing:.5px; }
+.ed-rsvp-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+.ed-rsvp-messages { margin-top:28px; text-align:left; }
+.ed-rsvp-message { background:var(--white); border-radius:14px; padding:18px; margin-bottom:12px; box-shadow:0 4px 12px rgba(0,0,0,.04); border:1px solid rgba(201,169,110,.08); }
+.ed-rsvp-message-name { font-weight:700; font-size:14px; color:var(--navy); margin-bottom:6px; }
+.ed-rsvp-message-text { font-size:13px; color:var(--gray); line-height:1.7; }
+.ed-rsvp-message-time { font-size:11px; color:var(--gray); margin-top:10px; }
+
+/* ============ GIFT SECTION ============ */
+.ed-gift { padding:70px 24px; text-align:center; background:var(--white); }
+.ed-gift-title { font-family:'Playfair Display',serif; font-size:28px; font-weight:600; color:var(--navy); margin-bottom:10px; }
+.ed-gift-desc { font-size:14px; color:var(--gray); margin-bottom:32px; max-width:420px; margin-left:auto; margin-right:auto; }
+.ed-gift-bank { background:linear-gradient(135deg, var(--cream), #fff); border-radius:20px; padding:28px; margin-bottom:16px; text-align:left; box-shadow:0 4px 20px rgba(0,0,0,.04); border:1px solid rgba(201,169,110,.1); }
+.ed-gift-bank-header { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.ed-gift-bank-logo { width:52px; height:52px; background:var(--white); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 4px 12px rgba(0,0,0,.06); }
+.ed-gift-bank-name { font-size:15px; font-weight:700; color:var(--navy); }
+.ed-gift-bank-num { font-size:20px; font-weight:600; color:var(--navy); font-family:'Courier New',monospace; margin-bottom:6px; letter-spacing:1px; }
+.ed-gift-bank-holder { font-size:13px; color:var(--gray); }
+.ed-gift-copy { padding:10px 18px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; margin-top:14px; transition:all .3s; }
+.ed-gift-copy:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(201,169,110,.3); }
+
+/* ============ CLOSING SECTION ============ */
+.ed-closing { padding:70px 24px; text-align:center; background:linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%); color:var(--white); position:relative; }
+.ed-closing::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(201,169,110,.3), transparent); }
+.ed-closing-quote { font-family:'Dancing Script',cursive; font-size:30px; color:var(--gold-light); margin-bottom:18px; }
+.ed-closing-text { font-size:14px; opacity:.75; line-height:1.9; max-width:420px; margin:0 auto 28px; }
+.ed-closing-names { font-family:'Great Vibes',cursive; font-size:40px; color:var(--gold); text-shadow:0 4px 20px rgba(201,169,110,.2); }
+
+/* ============ FOOTER ============ */
+.ed-footer { padding:28px 24px; text-align:center; background:var(--navy); color:var(--gray); font-size:12px; border-top:1px solid rgba(201,169,110,.08); }
+.ed-footer-brand { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold); margin-bottom:6px; }
+
+/* ============ MUSIC BUTTON ============ */
+.ed-music { position:fixed; bottom:84px; right:20px; width:56px; height:56px; background:linear-gradient(135deg, var(--gold), #b8944f); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 6px 25px rgba(201,169,110,.4); z-index:90; border:none; transition:all .3s; }
+.ed-music:hover { transform:scale(1.1); }
+.ed-music svg { width:24px; height:24px; color:var(--navy); }
+.ed-music.playing { animation:spin-music 3s linear infinite; }
+@keyframes spin-music { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+
+/* ============ SCROLL INDICATOR ============ */
+.scroll-indicator { position:fixed; right:20px; top:50%; transform:translateY(-50%); z-index:90; display:flex; flex-direction:column; gap:10px; }
+.scroll-dot { width:8px; height:8px; border-radius:50%; background:rgba(201,169,110,.2); cursor:pointer; transition:all .3s; }
+.scroll-dot.active { background:var(--gold); transform:scale(1.4); box-shadow:0 0 10px rgba(201,169,110,.4); }
+
+/* ============ BOTTOM NAV ============ */
+.ed-bottom-nav { position:fixed; bottom:0; left:0; right:0; background:rgba(10,10,26,.95); backdrop-filter:blur(20px); border-top:1px solid rgba(201,169,110,.1); padding:8px 0; display:flex; justify-content:space-around; align-items:center; z-index:100; }
+.ed-bottom-item { display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px 12px; border:none; background:none; cursor:pointer; color:var(--gray); font-size:11px; font-family:'Inter',sans-serif; font-weight:500; transition:all .3s; text-decoration:none; }
+.ed-bottom-item:hover, .ed-bottom-item.active { color:var(--gold); }
+.ed-bottom-item svg { width:22px; height:22px; }
+
+/* ============ TUTORIAL OVERLAY ============ */
+.ed-tutorial { position:fixed; inset:0; background:rgba(10,10,26,.8); z-index:200; display:flex; align-items:center; justify-content:center; padding:24px; backdrop-filter:blur(8px); }
+.ed-tutorial-box { background:var(--navy-light); border:1px solid rgba(201,169,110,.2); border-radius:24px; padding:40px; max-width:420px; width:100%; text-align:center; }
+.ed-tutorial-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:700; color:var(--gold); margin-bottom:20px; }
+.ed-tutorial-text { font-size:14px; color:var(--gray); line-height:1.9; margin-bottom:28px; }
+.ed-tutorial-text b { color:var(--white); }
+.ed-tutorial-btn { padding:14px 36px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; }
+.ed-tutorial-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+
+/* ============ EDIT MODAL ============ */
+.ed-modal { position:fixed; inset:0; background:rgba(10,10,26,.7); z-index:200; display:none; align-items:flex-end; justify-content:center; backdrop-filter:blur(8px); }
+.ed-modal.active { display:flex; }
+.ed-modal-box { background:var(--navy-light); border:1px solid rgba(201,169,110,.15); border-radius:24px 24px 0 0; padding:28px; width:100%; max-width:480px; max-height:85vh; overflow-y:auto; }
+.ed-modal-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; color:var(--gold); margin-bottom:20px; }
+.ed-modal-label { font-size:13px; font-weight:600; color:var(--white); margin-bottom:8px; display:block; }
+.ed-modal-input { width:100%; padding:14px 16px; background:var(--navy); border:1.5px solid rgba(255,255,255,.1); border-radius:12px; font-size:14px; color:var(--white); font-family:'Inter',sans-serif; margin-bottom:14px; transition:all .3s; }
+.ed-modal-input:focus { outline:none; border-color:var(--gold); }
+.ed-modal-input::placeholder { color:var(--gray); }
+.ed-modal-textarea { width:100%; padding:14px 16px; background:var(--navy); border:1.5px solid rgba(255,255,255,.1); border-radius:12px; font-size:14px; color:var(--white); font-family:'Inter',sans-serif; margin-bottom:14px; min-height:100px; resize:vertical; transition:all .3s; }
+.ed-modal-textarea:focus { outline:none; border-color:var(--gold); }
+.ed-modal-file { width:100%; padding:14px; border:2px dashed rgba(201,169,110,.3); border-radius:12px; font-size:14px; color:var(--gray); margin-bottom:14px; cursor:pointer; background:var(--navy); transition:all .3s; }
+.ed-modal-file:hover { border-color:var(--gold); }
+.ed-modal-actions { display:flex; gap:12px; margin-top:20px; }
+.ed-modal-btn { flex:1; padding:14px; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; border:none; transition:all .3s; }
+.ed-modal-btn.primary { background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); }
+.ed-modal-btn.primary:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+.ed-modal-btn.secondary { background:rgba(255,255,255,.05); color:var(--white); border:1.5px solid rgba(255,255,255,.1); }
+.ed-modal-btn.secondary:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ============ TOAST ============ */
+.ed-toast { position:fixed; top:80px; left:50%; transform:translateX(-50%) translateY(-100px); background:var(--navy-light); color:var(--gold); padding:14px 28px; border-radius:12px; font-size:14px; font-weight:700; z-index:300; opacity:0; transition:all .4s; box-shadow:0 8px 30px rgba(0,0,0,.3); border:1px solid rgba(201,169,110,.2); }
+.ed-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:640px) {
+  .ed-topbar { padding:12px 16px; }
+  .ed-topbar-title { font-size:16px; }
+  .ed-topbar-btn { padding:8px 14px; font-size:12px; }
+  .ed-opening-names { font-size:40px; }
+  .ed-couple-photo { width:120px; height:120px; }
+  .ed-couple-name { font-size:22px; }
+  .ed-countdown-number { font-size:30px; }
+  .ed-gallery-grid { grid-template-columns:repeat(2, 1fr); }
+  .scroll-indicator { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="ed-toast" id="toast"></div>
+
+<!-- Topbar -->
+<div class="ed-topbar">
+  <a href="dashboard.html" class="ed-topbar-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Dashboard
+  </a>
+  <div class="ed-topbar-title">Editor Undangan</div>
+  <div class="ed-topbar-actions">
+    <a href="invitation.html" target="_blank" class="ed-topbar-btn outline">👁 Pratinjau</a>
+    <button class="ed-topbar-btn" onclick="saveInvitation()">💾 Simpan</button>
+  </div>
+</div>
+
+<!-- Scroll Indicator -->
+<div class="scroll-indicator" id="scrollIndicator">
+  <div class="scroll-dot active" data-section="0"></div>
+  <div class="scroll-dot" data-section="1"></div>
+  <div class="scroll-dot" data-section="2"></div>
+  <div class="scroll-dot" data-section="3"></div>
+  <div class="scroll-dot" data-section="4"></div>
+  <div class="scroll-dot" data-section="5"></div>
+  <div class="scroll-dot" data-section="6"></div>
+  <div class="scroll-dot" data-section="7"></div>
+</div>
+
+<!-- Invitation Preview -->
+<div class="ed-preview" id="invitationPreview">
+
+  <!-- OPENING / COVER -->
+  <div class="ed-section ed-opening" data-section="opening" onclick="openEditModal('opening')">
+    <div class="ed-opening-label">The Wedding of</div>
+    <div class="ed-opening-names" id="openingNames">Ican & Faiza</div>
+    <div class="ed-opening-date" id="openingDate">15 Agustus 2026</div>
+    <button class="ed-opening-btn" onclick="scrollToContent(event)">Buka Undangan</button>
+    <div class="ed-opening-scroll">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+    </div>
+  </div>
+
+  <!-- COUPLE -->
+  <div class="ed-section ed-couple" data-section="couple" onclick="openEditModal('couple')">
+    <div class="ed-couple-label">Mempelai</div>
+    <div class="ed-couple-photos">
+      <div class="ed-couple-photo" id="groomPhoto">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face" alt="Mempelai Pria" id="groomImg">
+        <div class="ed-couple-photo-upload" onclick="uploadPhoto('groom', event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Ganti Foto</span>
+        </div>
+      </div>
+      <div class="ed-couple-and">&</div>
+      <div class="ed-couple-photo" id="bridePhoto">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop&crop=face" alt="Mempelai Wanita" id="brideImg">
+        <div class="ed-couple-photo-upload" onclick="uploadPhoto('bride', event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Ganti Foto</span>
+        </div>
+      </div>
+    </div>
+    <div class="ed-couple-name" id="groomFullName">Ican Pratama</div>
+    <div class="ed-couple-parents" id="groomParents">Putra dari Bapak Ahmad Wijaya & Ibu Siti Aminah</div>
+    <div style="height:28px;"></div>
+    <div class="ed-couple-name" id="brideFullName">Faiza Rahmawati</div>
+    <div class="ed-couple-parents" id="brideParents">Putri dari Bapak Budi Santoso & Ibu Rina Susanti</div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="ed-section ed-quote" data-section="quote" onclick="openEditModal('quote')">
+    <div class="ed-quote-divider"></div>
+    <div class="ed-quote-arabic" id="quoteArabic">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً</div>
+    <div class="ed-quote-text" id="quoteText">"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir."</div>
+    <div class="ed-quote-ref" id="quoteRef">- Ar-Rum · Ayat 21 -</div>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div class="ed-section ed-countdown" data-section="countdown" onclick="openEditModal('countdown')">
+    <div class="ed-countdown-title">Menuju Hari Bahagia</div>
+    <div class="ed-countdown-grid">
+      <div class="ed-countdown-item">
+        <div class="ed-countdown-number" id="cdDays">00</div>
+        <div class="ed-countdown-label">Hari</div>
+      </div>
+      <div class="ed-countdown-item">
+        <div class="ed-countdown-number" id="cdHours">00</div>
+        <div class="ed-countdown-label">Jam</div>
+      </div>
+      <div class="ed-countdown-item">
+        <div class="ed-countdown-number" id="cdMinutes">00</div>
+        <div class="ed-countdown-label">Menit</div>
+      </div>
+      <div class="ed-countdown-item">
+        <div class="ed-countdown-number" id="cdSeconds">00</div>
+        <div class="ed-countdown-label">Detik</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENT -->
+  <div class="ed-section ed-event" data-section="event" onclick="openEditModal('event')">
+    <div class="ed-event-title">Detail Acara</div>
+    <div class="ed-event-subtitle">Dengan penuh rasa syukur, kami mengundang Anda</div>
+
+    <div class="ed-event-card">
+      <div class="ed-event-card-header">
+        <div class="ed-event-card-icon">💍</div>
+        <div class="ed-event-card-title">Akad Nikah</div>
+      </div>
+      <div class="ed-event-card-date" id="akadDate">Jumat, 15 Agustus 2026</div>
+      <div class="ed-event-card-time" id="akadTime">Pukul 08:00 - 10:00 WIB</div>
+      <div class="ed-event-card-venue" id="akadVenue">Masjid Al-Ikhlas</div>
+      <div class="ed-event-card-address" id="akadAddress">Jl. Sudirman No. 123, Jakarta Selatan</div>
+      <a href="https://maps.google.com/?q=Masjid+Al-Ikhlas+Jakarta+Selatan" target="_blank" class="ed-map-btn" onclick="event.stopPropagation()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        Buka di Google Maps
+      </a>
+    </div>
+
+    <div class="ed-event-card">
+      <div class="ed-event-card-header">
+        <div class="ed-event-card-icon">🎉</div>
+        <div class="ed-event-card-title">Resepsi</div>
+      </div>
+      <div class="ed-event-card-date" id="resepsiDate">Jumat, 15 Agustus 2026</div>
+      <div class="ed-event-card-time" id="resepsiTime">Pukul 11:00 - 15:00 WIB</div>
+      <div class="ed-event-card-venue" id="resepsiVenue">Gedung Serba Guna Bhakti</div>
+      <div class="ed-event-card-address" id="resepsiAddress">Jl. Thamrin No. 45, Jakarta Pusat</div>
+      <a href="https://maps.google.com/?q=Gedung+Serba+Guna+Bhakti+Jakarta+Pusat" target="_blank" class="ed-map-btn" onclick="event.stopPropagation()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        Buka di Google Maps
+      </a>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="ed-section ed-gallery" data-section="gallery" onclick="openEditModal('gallery')">
+    <div class="ed-gallery-title">Galeri Foto</div>
+    <div class="ed-gallery-subtitle">Kenangan indah kami</div>
+    <div class="ed-gallery-grid" id="galleryGrid">
+      <div class="ed-gallery-item">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=400&fit=crop" alt="Foto 1">
+        <div class="ed-gallery-item-upload" onclick="uploadGallery(0, event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Ganti</span>
+        </div>
+      </div>
+      <div class="ed-gallery-item">
+        <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400&h=400&fit=crop" alt="Foto 2">
+        <div class="ed-gallery-item-upload" onclick="uploadGallery(1, event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Ganti</span>
+        </div>
+      </div>
+      <div class="ed-gallery-item">
+        <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=400&h=400&fit=crop" alt="Foto 3">
+        <div class="ed-gallery-item-upload" onclick="uploadGallery(2, event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Ganti</span>
+        </div>
+      </div>
+      <div class="ed-gallery-item">
+        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=400&fit=crop" alt="Foto 4">
+        <div class="ed-gallery-item-upload" onclick="uploadGallery(3, event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Ganti</span>
+        </div>
+      </div>
+      <div class="ed-gallery-item">
+        <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=400&h=400&fit=crop" alt="Foto 5">
+        <div class="ed-gallery-item-upload" onclick="uploadGallery(4, event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Ganti</span>
+        </div>
+      </div>
+      <div class="ed-gallery-item">
+        <img src="https://images.unsplash.com/photo-1529634806980-85c3dd6d34ac?w=400&h=400&fit=crop" alt="Foto 6">
+        <div class="ed-gallery-item-upload" onclick="uploadGallery(5, event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Ganti</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RSVP -->
+  <div class="ed-section ed-rsvp" data-section="rsvp" onclick="openEditModal('rsvp')">
+    <div class="ed-rsvp-title">Konfirmasi Kehadiran</div>
+    <div class="ed-rsvp-desc">Mohon konfirmasi kehadiran Anda melalui form di bawah ini</div>
+    <div class="ed-rsvp-form">
+      <input type="text" class="ed-rsvp-input" placeholder="Nama Lengkap" id="rsvpName">
+      <input type="tel" class="ed-rsvp-input" placeholder="Nomor WhatsApp" id="rsvpPhone">
+      <select class="ed-rsvp-input" id="rsvpStatus" style="cursor:pointer;">
+        <option value="" disabled selected>Status Kehadiran</option>
+        <option value="hadir">Hadir</option>
+        <option value="tidak_hadir">Tidak Hadir</option>
+        <option value="belum_pasti">Belum Pasti</option>
+      </select>
+      <input type="number" class="ed-rsvp-input" placeholder="Jumlah Tamu" id="rsvpPax" min="1" max="10">
+      <textarea class="ed-rsvp-input" placeholder="Ucapan & Doa (opsional)" id="rsvpMessage" style="min-height:80px; resize:vertical;"></textarea>
+      <button class="ed-rsvp-btn" onclick="submitRSVP(event)">Kirim Konfirmasi</button>
+    </div>
+    <div class="ed-rsvp-messages" id="rsvpMessages">
+      <div class="ed-rsvp-message">
+        <div class="ed-rsvp-message-name">Budi Santoso</div>
+        <div class="ed-rsvp-message-text">Selamat ya Ican & Faiza! Semoga menjadi keluarga yang sakinah mawaddah warahmah. Aamiin. 🎉</div>
+        <div class="ed-rsvp-message-time">2 jam yang lalu</div>
+      </div>
+      <div class="ed-rsvp-message">
+        <div class="ed-rsvp-message-name">Rina Wulandari</div>
+        <div class="ed-rsvp-message-text">Tidak sabar menunggu hari bahagianya! Semoga lancar sampai hari H. ❤️</div>
+        <div class="ed-rsvp-message-time">5 jam yang lalu</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GIFT -->
+  <div class="ed-section ed-gift" data-section="gift" onclick="openEditModal('gift')">
+    <div class="ed-gift-title">Amplop Digital</div>
+    <div class="ed-gift-desc">Doa restu Anda adalah hadiah terindah. Namun jika ingin memberikan tanda kasih, Anda bisa transfer ke rekening berikut:</div>
+    <div class="ed-gift-bank">
+      <div class="ed-gift-bank-header">
+        <div class="ed-gift-bank-logo">🏦</div>
+        <div class="ed-gift-bank-name">Bank BCA</div>
+      </div>
+      <div class="ed-gift-bank-num" id="bankNum1">1234 5678 9012 3456</div>
+      <div class="ed-gift-bank-holder" id="bankHolder1">a.n. Ican Pratama</div>
+      <button class="ed-gift-copy" onclick="copyRek('bankNum1', event)">📋 Salin Nomor</button>
+    </div>
+    <div class="ed-gift-bank">
+      <div class="ed-gift-bank-header">
+        <div class="ed-gift-bank-logo">🏦</div>
+        <div class="ed-gift-bank-name">Bank Mandiri</div>
+      </div>
+      <div class="ed-gift-bank-num" id="bankNum2">98 765 4321 098</div>
+      <div class="ed-gift-bank-holder" id="bankHolder2">a.n. Faiza Rahmawati</div>
+      <button class="ed-gift-copy" onclick="copyRek('bankNum2', event)">📋 Salin Nomor</button>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="ed-section ed-closing" data-section="closing" onclick="openEditModal('closing')">
+    <div class="ed-closing-quote">"Cinta sejati tidak pernah berakhir, ia hanya semakin kuat seiring waktu."</div>
+    <div class="ed-closing-text">Terima kasih atas doa dan kehadiran Anda. Kehadiran Anda adalah kebahagiaan terbesar bagi kami.</div>
+    <div class="ed-closing-names" id="closingNames">Ican & Faiza</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="ed-footer">
+    <div class="ed-footer-brand">WedInvite</div>
+    <div>Dibuat dengan ❤️ untuk momen spesial Anda</div>
+  </div>
+
+</div>
+
+<!-- Music Button -->
+<button class="ed-music" id="musicBtn" onclick="toggleMusic()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+</button>
+
+<!-- Bottom Navigation -->
+<nav class="ed-bottom-nav">
+  <a href="editor.html" class="ed-bottom-item active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    Menu
+  </a>
+  <a href="settings.html" class="ed-bottom-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 5 15.34a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Pengaturan
+  </a>
+  <a href="invitation.html" class="ed-bottom-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+    Pratinjau
+  </a>
+  <a href="subscription.html" class="ed-bottom-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+    Aktivasi
+  </a>
+  <a href="share.html" class="ed-bottom-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+    Sebar
+  </a>
+</nav>
+
+<!-- Tutorial Overlay -->
+<div class="ed-tutorial" id="tutorialOverlay">
+  <div class="ed-tutorial-box">
+    <div class="ed-tutorial-title">Selamat Datang di Editor!</div>
+    <div class="ed-tutorial-text">
+      🖱️ <b>Klik bagian</b> yang ingin diedit<br>
+      📷 <b>Upload foto</b> dengan hover lalu klik "Ganti Foto"<br>
+      🎵 <b>Musik</b> bisa diaktifkan lewat tombol kanan bawah<br>
+      💾 <b>Simpan</b> perubahan di tombol emas atas<br><br>
+      Undangan akan <b>auto-scroll</b> saat dibuka tamu
+    </div>
+    <button class="ed-tutorial-btn" onclick="closeTutorial()">Mengerti, Mulai Edit!</button>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="ed-modal" id="editModal">
+  <div class="ed-modal-box">
+    <div class="ed-modal-title" id="modalTitle">Edit Bagian</div>
+    <div id="modalContent"></div>
+    <div class="ed-modal-actions">
+      <button class="ed-modal-btn secondary" onclick="closeModal()">Batal</button>
+      <button class="ed-modal-btn primary" onclick="saveModal()">Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="fileInputGroom" accept="image/*" style="display:none" onchange="handlePhotoUpload('groom', this)">
+<input type="file" id="fileInputBride" accept="image/*" style="display:none" onchange="handlePhotoUpload('bride', this)">
+<input type="file" id="fileInputGallery" accept="image/*" style="display:none" onchange="handleGalleryUpload(this)">
+
+<script>
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ===== TUTORIAL =====
+function closeTutorial() {
+  document.getElementById('tutorialOverlay').style.display = 'none';
+  localStorage.setItem('wedinvite_tutorial_seen', 'true');
+}
+if (localStorage.getItem('wedinvite_tutorial_seen')) {
+  document.getElementById('tutorialOverlay').style.display = 'none';
+}
+
+// ===== MUSIC =====
+let musicPlaying = false;
+function toggleMusic() {
+  const btn = document.getElementById('musicBtn');
+  musicPlaying = !musicPlaying;
+  btn.classList.toggle('playing', musicPlaying);
+  showToast(musicPlaying ? '🎵 Musik dimainkan' : '🔇 Musik dijeda');
+}
+
+// ===== SCROLL TO CONTENT =====
+function scrollToContent(e) {
+  e.stopPropagation();
+  document.querySelector('.ed-couple').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== SCROLL INDICATOR =====
+const sections = document.querySelectorAll('.ed-section');
+const dots = document.querySelectorAll('.scroll-dot');
+window.addEventListener('scroll', () => {
+  let current = 0;
+  sections.forEach((sec, i) => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top <= window.innerHeight / 2) current = i;
+  });
+  dots.forEach((d, i) => d.classList.toggle('active', i === current));
+});
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => {
+    sections[i].scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ===== PHOTO UPLOAD =====
+let currentGalleryIndex = -1;
+function uploadPhoto(who, e) {
+  e.stopPropagation();
+  document.getElementById('fileInput' + (who === 'groom' ? 'Groom' : 'Bride')).click();
+}
+function handlePhotoUpload(who, input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById(who + 'Img').src = e.target.result;
+      showToast('✅ Foto ' + (who === 'groom' ? 'mempelai pria' : 'mempelai wanita') + ' diperbarui!');
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+function uploadGallery(index, e) {
+  e.stopPropagation();
+  currentGalleryIndex = index;
+  document.getElementById('fileInputGallery').click();
+}
+function handleGalleryUpload(input) {
+  if (input.files && input.files[0] && currentGalleryIndex >= 0) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const items = document.querySelectorAll('.ed-gallery-item img');
+      if (items[currentGalleryIndex]) {
+        items[currentGalleryIndex].src = e.target.result;
+        showToast('✅ Foto galeri diperbarui!');
+      }
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+  currentGalleryIndex = -1;
+}
+
+// ===== COUNTDOWN =====
+function updateCountdown() {
+  const target = new Date('2026-08-15T08:00:00').getTime();
+  const now = new Date().getTime();
+  const diff = target - now;
+  if (diff > 0) {
+    const d = Math.floor(diff / (1000*60*60*24));
+    const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const s = Math.floor((diff % (1000*60)) / 1000);
+    document.getElementById('cdDays').textContent = String(d).padStart(2,'0');
+    document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cdMinutes').textContent = String(m).padStart(2,'0');
+    document.getElementById('cdSeconds').textContent = String(s).padStart(2,'0');
+  }
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// ===== EDIT MODAL =====
+let currentSection = '';
+const sectionFields = {
+  opening: [
+    { label: 'Nama Pasangan', id: 'editOpeningNames', value: 'openingNames', type: 'input' },
+    { label: 'Tanggal', id: 'editOpeningDate', value: 'openingDate', type: 'input' }
+  ],
+  couple: [
+    { label: 'Nama Lengkap Pria', id: 'editGroomFull', value: 'groomFullName', type: 'input' },
+    { label: 'Orang Tua Pria', id: 'editGroomParents', value: 'groomParents', type: 'input' },
+    { label: 'Nama Lengkap Wanita', id: 'editBrideFull', value: 'brideFullName', type: 'input' },
+    { label: 'Orang Tua Wanita', id: 'editBrideParents', value: 'brideParents', type: 'input' }
+  ],
+  quote: [
+    { label: 'Ayat Arab', id: 'editArabic', value: 'quoteArabic', type: 'textarea' },
+    { label: 'Terjemahan', id: 'editText', value: 'quoteText', type: 'textarea' },
+    { label: 'Referensi', id: 'editRef', value: 'quoteRef', type: 'input' }
+  ],
+  event: [
+    { label: 'Tanggal Akad', id: 'editAkadDate', value: 'akadDate', type: 'input' },
+    { label: 'Waktu Akad', id: 'editAkadTime', value: 'akadTime', type: 'input' },
+    { label: 'Tempat Akad', id: 'editAkadVenue', value: 'akadVenue', type: 'input' },
+    { label: 'Alamat Akad', id: 'editAkadAddress', value: 'akadAddress', type: 'input' },
+    { label: 'Tanggal Resepsi', id: 'editResepsiDate', value: 'resepsiDate', type: 'input' },
+    { label: 'Waktu Resepsi', id: 'editResepsiTime', value: 'resepsiTime', type: 'input' },
+    { label: 'Tempat Resepsi', id: 'editResepsiVenue', value: 'resepsiVenue', type: 'input' },
+    { label: 'Alamat Resepsi', id: 'editResepsiAddress', value: 'resepsiAddress', type: 'input' }
+  ],
+  rsvp: [
+    { label: 'Judul RSVP', id: 'editRsvpTitle', value: 'rsvpTitle', type: 'input' },
+    { label: 'Deskripsi', id: 'editRsvpDesc', value: 'rsvpDesc', type: 'input' }
+  ],
+  gift: [
+    { label: 'Judul Amplop', id: 'editGiftTitle', value: 'giftTitle', type: 'input' },
+    { label: 'Deskripsi', id: 'editGiftDesc', value: 'giftDesc', type: 'input' },
+    { label: 'No Rekening 1', id: 'editBankNum1', value: 'bankNum1', type: 'input' },
+    { label: 'Atas Nama 1', id: 'editBankHolder1', value: 'bankHolder1', type: 'input' },
+    { label: 'No Rekening 2', id: 'editBankNum2', value: 'bankNum2', type: 'input' },
+    { label: 'Atas Nama 2', id: 'editBankHolder2', value: 'bankHolder2', type: 'input' }
+  ],
+  closing: [
+    { label: 'Kutipan Penutup', id: 'editClosingQuote', value: 'closingQuote', type: 'textarea' },
+    { label: 'Nama Pasangan', id: 'editClosingNames', value: 'closingNames', type: 'input' }
+  ]
+};
+
+function openEditModal(section) {
+  currentSection = section;
+  const modal = document.getElementById('editModal');
+  const content = document.getElementById('modalContent');
+  const title = document.getElementById('modalTitle');
+
+  const titles = { opening: 'Edit Sampul', couple: 'Edit Mempelai', quote: 'Edit Kutipan', countdown: 'Edit Countdown', event: 'Edit Acara', gallery: 'Edit Galeri', rsvp: 'Edit RSVP', gift: 'Edit Amplop', closing: 'Edit Penutup' };
+  title.textContent = titles[section] || 'Edit Bagian';
+
+  let html = '';
+  if (section === 'gallery') {
+    html = '<p style="font-size:14px;color:var(--gray);margin-bottom:16px;">Hover foto di galeri lalu klik "Ganti" untuk upload foto baru.</p>';
+    html += '<label class="ed-modal-label">Upload Foto Baru</label><input type="file" class="ed-modal-file" accept="image/*" id="modalGalleryUpload"><p style="font-size:12px;color:var(--gray);margin-top:8px;">Foto akan ditambahkan ke galeri.</p>';
+  } else if (section === 'countdown') {
+    html = '<label class="ed-modal-label">Tanggal & Waktu Acara</label><input type="datetime-local" class="ed-modal-input" id="editCountdownDate"><p style="font-size:12px;color:var(--gray);margin-top:8px;">Countdown akan otomatis dihitung dari tanggal ini.</p>';
+  } else if (sectionFields[section]) {
+    sectionFields[section].forEach(field => {
+      const el = document.getElementById(field.value);
+      const val = el ? (el.textContent || el.value || '') : '';
+      if (field.type === 'textarea') {
+        html += `<label class="ed-modal-label">${field.label}</label><textarea class="ed-modal-textarea" id="${field.id}">${val}</textarea>`;
+      } else {
+        html += `<label class="ed-modal-label">${field.label}</label><input type="text" class="ed-modal-input" id="${field.id}" value="${val}">`;
+      }
+    });
+  }
+  content.innerHTML = html;
+  modal.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('editModal').classList.remove('active');
+}
+
+function saveModal() {
+  const fields = sectionFields[currentSection];
+  if (fields) {
+    fields.forEach(field => {
+      const input = document.getElementById(field.id);
+      const target = document.getElementById(field.value);
+      if (input && target) {
+        target.textContent = input.value;
+      }
+    });
+  }
+  closeModal();
+  showToast('✅ Perubahan disimpan!');
+}
+
+// ===== SAVE & PREVIEW =====
+function saveInvitation() {
+  showToast('💾 Undangan berhasil disimpan!');
+}
+
+// ===== RSVP =====
+function submitRSVP(e) {
+  e.stopPropagation();
+  const name = document.getElementById('rsvpName').value;
+  if (!name) { showToast('⚠️ Mohon isi nama Anda'); return; }
+  showToast('✅ Konfirmasi berhasil dikirim! Terima kasih ' + name);
+  document.getElementById('rsvpName').value = '';
+  document.getElementById('rsvpPhone').value = '';
+  document.getElementById('rsvpStatus').value = '';
+  document.getElementById('rsvpPax').value = '';
+  document.getElementById('rsvpMessage').value = '';
+}
+
+// ===== COPY REK =====
+function copyRek(id, e) {
+  e.stopPropagation();
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text);
+  showToast('📋 Nomor rekening disalin!');
+}
+
+// ===== THEME =====
+const urlParams = new URLSearchParams(window.location.search);
+const theme = urlParams.get('theme');
+if (theme) {
+  console.log('Theme selected:', theme);
+}
+</script>
+
+</body>
+</html>

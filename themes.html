@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Template Undangan — WedInvite</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0a1a; --navy-light:#141428; --navy-mid:#1e1e3f;
+  --gold:#c9a96e; --gold-light:#e8d5b0; --gold-bright:#f0d78c;
+  --cream:#faf7f2; --white:#fff; --gray:#8a8a9a; --gray-light:#e8e8ee;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
+
+/* ============ TOPBAR ============ */
+.topbar { background:var(--navy-light); border-bottom:1px solid rgba(201,169,110,.1); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+.topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; }
+.topbar-back:hover { color:var(--gold); }
+.topbar-back svg { width:20px; height:20px; }
+.topbar-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; }
+
+/* ============ HEADER ============ */
+.header { text-align:center; padding:60px 24px 40px; max-width:700px; margin:0 auto; }
+.header-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.header-title { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; margin-bottom:12px; }
+.header-subtitle { font-size:16px; color:var(--gray); }
+
+/* ============ FILTER ============ */
+.filter { display:flex; justify-content:center; gap:8px; padding:0 24px 32px; flex-wrap:wrap; }
+.filter-btn { padding:10px 20px; background:transparent; border:1.5px solid rgba(255,255,255,.1); border-radius:50px; color:var(--gray); font-size:13px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; }
+.filter-btn:hover, .filter-btn.active { background:rgba(201,169,110,.1); border-color:var(--gold); color:var(--gold); }
+
+/* ============ THEMES GRID ============ */
+.themes { max-width:1100px; margin:0 auto; padding:0 24px 80px; display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+.theme-card { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:20px; overflow:hidden; transition:all .4s; position:relative; }
+.theme-card:hover { transform:translateY(-8px); border-color:rgba(201,169,110,.25); box-shadow:0 20px 60px rgba(0,0,0,.4); }
+.theme-card-img { width:100%; height:200px; object-fit:cover; transition:transform .4s; }
+.theme-card:hover .theme-card-img { transform:scale(1.05); }
+.theme-card-body { padding:20px; }
+.theme-card-theme { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+.theme-card-name { font-family:'Playfair Display',serif; font-size:18px; font-weight:600; margin-bottom:4px; }
+.theme-card-desc { font-size:13px; color:var(--gray); margin-bottom:16px; }
+.theme-card-actions { display:flex; gap:8px; }
+.theme-card-btn { flex:1; padding:10px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; border:none; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:4px; transition:all .3s; }
+.theme-card-btn.primary { background:var(--gold); color:var(--navy); }
+.theme-card-btn.primary:hover { background:var(--gold-light); }
+.theme-card-btn.secondary { background:rgba(255,255,255,.05); color:var(--white); border:1px solid rgba(255,255,255,.1); }
+.theme-card-btn.secondary:hover { border-color:var(--gold); color:var(--gold); }
+.theme-card-badge { position:absolute; top:12px; left:12px; padding:6px 12px; background:var(--gold); color:var(--navy); font-size:11px; font-weight:700; border-radius:6px; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:768px) {
+  .themes { grid-template-columns:1fr; }
+  .header-title { font-size:28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <a href="dashboard.html" class="topbar-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Dashboard
+  </a>
+  <div class="topbar-title">Pilih Template</div>
+  <a href="create-invitation.html" class="topbar-back" style="color:var(--gold);">+ Buat Baru</a>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-label">Koleksi Eksklusif</div>
+  <h1 class="header-title">Pilih Tema Undangan Anda</h1>
+  <p class="header-subtitle">Setiap tema dirancang dengan cermat untuk berbagai konsep pernikahan</p>
+</div>
+
+<!-- Filter -->
+<div class="filter">
+  <button class="filter-btn active">Semua</button>
+  <button class="filter-btn">Elegan</button>
+  <button class="filter-btn">Romantis</button>
+  <button class="filter-btn">Modern</button>
+  <button class="filter-btn">Tradisional</button>
+</div>
+
+<!-- Themes Grid -->
+<div class="themes">
+  <div class="theme-card">
+    <div style="overflow:hidden; position:relative;">
+      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=400&fit=crop" class="theme-card-img" alt="Royal Navy Gold">
+      <div class="theme-card-badge">POPULER</div>
+    </div>
+    <div class="theme-card-body">
+      <div class="theme-card-theme">Elegan · Klasik</div>
+      <div class="theme-card-name">Royal Navy Gold</div>
+      <div class="theme-card-desc">Tema elegan dengan palet navy dan gold yang mewah</div>
+      <div class="theme-card-actions">
+        <a href="editor.html?theme=royal-navy-gold" class="theme-card-btn primary">Pilih Tema</a>
+        <a href="invitation.html?theme=royal-navy-gold" target="_blank" class="theme-card-btn secondary">👁 Pratinjau</a>
+      </div>
+    </div>
+  </div>
+  <div class="theme-card">
+    <div style="overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&h=400&fit=crop" class="theme-card-img" alt="Rustic Garden">
+    </div>
+    <div class="theme-card-body">
+      <div class="theme-card-theme">Alami · Romantis</div>
+      <div class="theme-card-name">Rustic Garden</div>
+      <div class="theme-card-desc">Nuansa alam dengan sentuhan vintage yang hangat</div>
+      <div class="theme-card-actions">
+        <a href="editor.html?theme=rustic-garden" class="theme-card-btn primary">Pilih Tema</a>
+        <a href="invitation.html?theme=rustic-garden" target="_blank" class="theme-card-btn secondary">👁 Pratinjau</a>
+      </div>
+    </div>
+  </div>
+  <div class="theme-card">
+    <div style="overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&h=400&fit=crop" class="theme-card-img" alt="Minimalist White">
+    </div>
+    <div class="theme-card-body">
+      <div class="theme-card-theme">Sederhana · Modern</div>
+      <div class="theme-card-name">Minimalist White</div>
+      <div class="theme-card-desc">Desain bersih dan minimalis untuk konsep modern</div>
+      <div class="theme-card-actions">
+        <a href="editor.html?theme=minimalist-white" class="theme-card-btn primary">Pilih Tema</a>
+        <a href="invitation.html?theme=minimalist-white" target="_blank" class="theme-card-btn secondary">👁 Pratinjau</a>
+      </div>
+    </div>
+  </div>
+  <div class="theme-card">
+    <div style="overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1529634806980-85c3dd6d34ac?w=600&h=400&fit=crop" class="theme-card-img" alt="Floral Pastel">
+    </div>
+    <div class="theme-card-body">
+      <div class="theme-card-theme">Lembut · Feminim</div>
+      <div class="theme-card-name">Floral Pastel</div>
+      <div class="theme-card-desc">Warna pastel lembut dengan elemen bunga yang anggun</div>
+      <div class="theme-card-actions">
+        <a href="editor.html?theme=floral-pastel" class="theme-card-btn primary">Pilih Tema</a>
+        <a href="invitation.html?theme=floral-pastel" target="_blank" class="theme-card-btn secondary">👁 Pratinjau</a>
+      </div>
+    </div>
+  </div>
+  <div class="theme-card">
+    <div style="overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&h=400&fit=crop" class="theme-card-img" alt="Dark Luxury">
+    </div>
+    <div class="theme-card-body">
+      <div class="theme-card-theme">Mewah · Dramatis</div>
+      <div class="theme-card-name">Dark Luxury</div>
+      <div class="theme-card-desc">Tema gelap dengan sentuhan emas yang dramatis</div>
+      <div class="theme-card-actions">
+        <a href="editor.html?theme=dark-luxury" class="theme-card-btn primary">Pilih Tema</a>
+        <a href="invitation.html?theme=dark-luxury" target="_blank" class="theme-card-btn secondary">👁 Pratinjau</a>
+      </div>
+    </div>
+  </div>
+  <div class="theme-card">
+    <div style="overflow:hidden;">
+      <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&h=400&fit=crop" class="theme-card-img" alt="Vintage Rose">
+    </div>
+    <div class="theme-card-body">
+      <div class="theme-card-theme">Klasik · Romantis</div>
+      <div class="theme-card-name">Vintage Rose</div>
+      <div class="theme-card-desc">Nuansa vintage dengan warna rose yang timeless</div>
+      <div class="theme-card-actions">
+        <a href="editor.html?theme=vintage-rose" class="theme-card-btn primary">Pilih Tema</a>
+        <a href="invitation.html?theme=vintage-rose" target="_blank" class="theme-card-btn secondary">👁 Pratinjau</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

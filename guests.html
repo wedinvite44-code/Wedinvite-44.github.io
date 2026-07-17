@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Daftar Tamu — WedInvite</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0a1a; --navy-light:#141428; --navy-mid:#1e1e3f;
+  --gold:#c9a96e; --gold-light:#e8d5b0; --gold-bright:#f0d78c;
+  --cream:#faf7f2; --white:#fff; --gray:#8a8a9a; --gray-light:#e8e8ee;
+  --success:#22c55e; --error:#ef4444; --warning:#f59e0b;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
+
+.topbar { background:var(--navy-light); border-bottom:1px solid rgba(201,169,110,.1); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+.topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; }
+.topbar-back:hover { color:var(--gold); }
+.topbar-back svg { width:20px; height:20px; }
+.topbar-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; }
+
+.container { max-width:800px; margin:0 auto; padding:32px 24px 80px; }
+
+.stats { display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:32px; }
+.stat-card { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:16px; padding:20px; text-align:center; }
+.stat-value { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; }
+.stat-value.hadir { color:var(--success); }
+.stat-value.tidak { color:var(--error); }
+.stat-value.belum { color:var(--warning); }
+.stat-label { font-size:12px; color:var(--gray); margin-top:4px; }
+
+.guest-table { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:20px; overflow:hidden; }
+.guest-table-header { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; padding:16px 24px; background:rgba(201,169,110,.05); border-bottom:1px solid rgba(201,169,110,.1); font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gold); }
+.guest-row { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; padding:16px 24px; border-bottom:1px solid rgba(255,255,255,.03); align-items:center; font-size:14px; }
+.guest-row:last-child { border-bottom:none; }
+.guest-name { font-weight:600; }
+.guest-phone { color:var(--gray); font-size:13px; }
+.guest-status { display:inline-flex; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; }
+.guest-status.hadir { background:rgba(34,197,94,.1); color:var(--success); }
+.guest-status.tidak { background:rgba(239,68,68,.1); color:var(--error); }
+.guest-status.belum { background:rgba(245,158,11,.1); color:var(--warning); }
+.guest-pax { color:var(--gray); }
+
+@media (max-width:640px) {
+  .stats { grid-template-columns:repeat(2, 1fr); }
+  .guest-table-header, .guest-row { grid-template-columns:1fr 1fr; gap:8px; }
+  .guest-table-header div:nth-child(3), .guest-row div:nth-child(3),
+  .guest-table-header div:nth-child(4), .guest-row div:nth-child(4) { display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="dashboard.html" class="topbar-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Dashboard
+  </a>
+  <div class="topbar-title">Daftar Tamu</div>
+</div>
+
+<div class="container">
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-value hadir">89</div>
+      <div class="stat-label">Hadir</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value tidak">12</div>
+      <div class="stat-label">Tidak Hadir</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value belum">45</div>
+      <div class="stat-label">Belum Pasti</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--gold);">146</div>
+      <div class="stat-label">Total Tamu</div>
+    </div>
+  </div>
+
+  <div class="guest-table">
+    <div class="guest-table-header">
+      <div>Nama</div>
+      <div>Status</div>
+      <div>Jumlah</div>
+      <div>Waktu</div>
+    </div>
+    <div class="guest-row">
+      <div>
+        <div class="guest-name">Budi Santoso</div>
+        <div class="guest-phone">0812-3456-7890</div>
+      </div>
+      <div><span class="guest-status hadir">Hadir</span></div>
+      <div class="guest-pax">2 orang</div>
+      <div class="guest-pax">2 jam lalu</div>
+    </div>
+    <div class="guest-row">
+      <div>
+        <div class="guest-name">Rina Wulandari</div>
+        <div class="guest-phone">0813-9876-5432</div>
+      </div>
+      <div><span class="guest-status hadir">Hadir</span></div>
+      <div class="guest-pax">3 orang</div>
+      <div class="guest-pax">5 jam lalu</div>
+    </div>
+    <div class="guest-row">
+      <div>
+        <div class="guest-name">Ahmad Fauzi</div>
+        <div class="guest-phone">0812-1111-2222</div>
+      </div>
+      <div><span class="guest-status tidak">Tidak Hadir</span></div>
+      <div class="guest-pax">-</div>
+      <div class="guest-pax">1 hari lalu</div>
+    </div>
+    <div class="guest-row">
+      <div>
+        <div class="guest-name">Siti Nurhaliza</div>
+        <div class="guest-phone">0813-3333-4444</div>
+      </div>
+      <div><span class="guest-status belum">Belum Pasti</span></div>
+      <div class="guest-pax">-</div>
+      <div class="guest-pax">2 hari lalu</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

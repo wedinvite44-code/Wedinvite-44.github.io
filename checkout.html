@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pembayaran — WedInvite</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0a1a; --navy-light:#141428; --navy-mid:#1e1e3f;
+  --gold:#c9a96e; --gold-light:#e8d5b0; --gold-bright:#f0d78c;
+  --cream:#faf7f2; --white:#fff; --gray:#8a8a9a; --gray-light:#e8e8ee;
+  --success:#22c55e;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
+
+.topbar { background:var(--navy-light); border-bottom:1px solid rgba(201,169,110,.1); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+.topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; }
+.topbar-back:hover { color:var(--gold); }
+.topbar-back svg { width:20px; height:20px; }
+.topbar-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; }
+
+.container { max-width:500px; margin:0 auto; padding:40px 24px 80px; }
+.header { text-align:center; margin-bottom:32px; }
+.header-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.header-title { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; }
+
+.order-card { background:var(--navy-light); border:1px solid rgba(201,169,110,.15); border-radius:20px; padding:24px; margin-bottom:24px; }
+.order-item { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.05); }
+.order-item:last-child { border-bottom:none; }
+.order-item-name { font-size:15px; font-weight:600; }
+.order-item-price { font-size:15px; color:var(--gold); font-weight:600; }
+.order-total { display:flex; justify-content:space-between; align-items:center; padding-top:16px; margin-top:8px; border-top:2px solid rgba(201,169,110,.2); }
+.order-total-label { font-size:16px; font-weight:700; }
+.order-total-price { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--gold); }
+
+.payment-methods { margin-bottom:24px; }
+.payment-method { display:flex; align-items:center; gap:14px; padding:16px; background:var(--navy-light); border:1.5px solid rgba(255,255,255,.1); border-radius:14px; margin-bottom:12px; cursor:pointer; transition:all .3s; }
+.payment-method:hover, .payment-method.selected { border-color:var(--gold); background:rgba(201,169,110,.05); }
+.payment-method-icon { width:44px; height:44px; background:var(--white); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+.payment-method-info { flex:1; }
+.payment-method-name { font-size:14px; font-weight:600; }
+.payment-method-desc { font-size:12px; color:var(--gray); }
+.payment-method-check { width:22px; height:22px; border:2px solid rgba(255,255,255,.2); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.payment-method.selected .payment-method-check { background:var(--gold); border-color:var(--gold); }
+
+.btn-pay { width:100%; padding:18px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:14px; font-size:16px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; }
+.btn-pay:hover { transform:translateY(-2px); box-shadow:0 12px 35px rgba(201,169,110,.35); }
+
+.secure-note { text-align:center; margin-top:20px; font-size:12px; color:var(--gray); display:flex; align-items:center; justify-content:center; gap:6px; }
+
+.toast { position:fixed; top:80px; left:50%; transform:translateX(-50%) translateY(-100px); background:var(--navy-light); color:var(--gold); padding:14px 28px; border-radius:12px; font-size:14px; font-weight:700; z-index:300; opacity:0; transition:all .4s; box-shadow:0 8px 30px rgba(0,0,0,.3); border:1px solid rgba(201,169,110,.2); }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+@media (max-width:640px) {
+  .container { padding:24px 20px 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="subscription.html" class="topbar-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Aktivasi
+  </a>
+  <div class="topbar-title">Pembayaran</div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <div class="header-label">Checkout</div>
+    <h1 class="header-title">Ringkasan Pesanan</h1>
+  </div>
+
+  <div class="order-card">
+    <div class="order-item">
+      <span class="order-item-name">Paket Premium</span>
+      <span class="order-item-price">Rp99.000</span>
+    </div>
+    <div class="order-item">
+      <span class="order-item-name">Biaya Admin</span>
+      <span class="order-item-price">Rp0</span>
+    </div>
+    <div class="order-total">
+      <span class="order-total-label">Total Pembayaran</span>
+      <span class="order-total-price">Rp99.000</span>
+    </div>
+  </div>
+
+  <div class="payment-methods">
+    <div class="payment-method selected" onclick="selectPayment(this)">
+      <div class="payment-method-icon">💳</div>
+      <div class="payment-method-info">
+        <div class="payment-method-name">Transfer Bank</div>
+        <div class="payment-method-desc">BCA, Mandiri, BNI, BRI</div>
+      </div>
+      <div class="payment-method-check">✓</div>
+    </div>
+    <div class="payment-method" onclick="selectPayment(this)">
+      <div class="payment-method-icon">📱</div>
+      <div class="payment-method-info">
+        <div class="payment-method-name">E-Wallet</div>
+        <div class="payment-method-desc">OVO, GoPay, DANA, LinkAja</div>
+      </div>
+      <div class="payment-method-check"></div>
+    </div>
+    <div class="payment-method" onclick="selectPayment(this)">
+      <div class="payment-method-icon">🏪</div>
+      <div class="payment-method-info">
+        <div class="payment-method-name">QRIS</div>
+        <div class="payment-method-desc">Scan QR dari semua e-wallet</div>
+      </div>
+      <div class="payment-method-check"></div>
+    </div>
+  </div>
+
+  <button class="btn-pay" onclick="processPayment()">💳 Bayar Sekarang</button>
+  <div class="secure-note">🔒 Pembayaran aman & terenkripsi</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+function selectPayment(el) {
+  document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function processPayment() {
+  showToast('✅ Pembayaran berhasil! Undangan Anda telah diaktifkan.');
+  setTimeout(() => window.location.href = 'dashboard.html', 2000);
+}
+</script>
+
+</body>
+</html>

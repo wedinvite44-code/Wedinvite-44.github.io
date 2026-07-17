@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Aktivasi — WedInvite</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0a1a; --navy-light:#141428; --navy-mid:#1e1e3f;
+  --gold:#c9a96e; --gold-light:#e8d5b0; --gold-bright:#f0d78c;
+  --cream:#faf7f2; --white:#fff; --gray:#8a8a9a; --gray-light:#e8e8ee;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
+
+.topbar { background:var(--navy-light); border-bottom:1px solid rgba(201,169,110,.1); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+.topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; }
+.topbar-back:hover { color:var(--gold); }
+.topbar-back svg { width:20px; height:20px; }
+.topbar-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; }
+
+.container { max-width:900px; margin:0 auto; padding:48px 24px 80px; }
+.header { text-align:center; margin-bottom:48px; }
+.header-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.header-title { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; margin-bottom:12px; }
+.header-subtitle { font-size:16px; color:var(--gray); }
+
+.status-card { background:linear-gradient(135deg, rgba(201,169,110,.1), rgba(201,169,110,.05)); border:1px solid rgba(201,169,110,.2); border-radius:20px; padding:28px; margin-bottom:40px; display:flex; align-items:center; gap:20px; }
+.status-icon { width:56px; height:56px; background:linear-gradient(135deg, var(--gold), #b8944f); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; }
+.status-info { flex:1; }
+.status-title { font-size:18px; font-weight:700; margin-bottom:4px; }
+.status-desc { font-size:14px; color:var(--gray); }
+.status-badge { padding:8px 16px; background:rgba(201,169,110,.15); border:1px solid rgba(201,169,110,.2); border-radius:8px; font-size:12px; color:var(--gold); font-weight:600; }
+
+.pricing-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.pricing-card { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:24px; padding:36px; transition:all .4s; position:relative; }
+.pricing-card.popular { border-color:rgba(201,169,110,.3); background:linear-gradient(180deg, var(--navy-light) 0%, rgba(201,169,110,.05) 100%); }
+.pricing-card.popular::before { content:'PALING POPULER'; position:absolute; top:-12px; left:50%; transform:translateX(-50%); padding:6px 20px; background:var(--gold); color:var(--navy); font-size:11px; font-weight:700; letter-spacing:1px; border-radius:50px; }
+.pricing-card:hover { transform:translateY(-4px); }
+.pricing-name { font-size:14px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+.pricing-price { font-family:'Playfair Display',serif; font-size:42px; font-weight:700; margin-bottom:4px; }
+.pricing-price span { font-size:16px; color:var(--gray); font-weight:400; font-family:'Inter',sans-serif; }
+.pricing-desc { font-size:14px; color:var(--gray); margin-bottom:24px; }
+.pricing-features { list-style:none; margin-bottom:28px; }
+.pricing-features li { display:flex; align-items:center; gap:10px; margin-bottom:12px; font-size:14px; color:rgba(255,255,255,.8); }
+.pricing-features li::before { content:'✓'; color:var(--gold); font-weight:700; }
+.pricing-btn { width:100%; padding:14px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:block; text-align:center; }
+.pricing-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+.pricing-btn.outline { background:transparent; border:1.5px solid rgba(255,255,255,.15); color:var(--white); }
+.pricing-btn.outline:hover { border-color:var(--gold); color:var(--gold); }
+
+@media (max-width:640px) {
+  .pricing-grid { grid-template-columns:1fr; }
+  .header-title { font-size:28px; }
+  .status-card { flex-direction:column; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="editor.html" class="topbar-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Editor
+  </a>
+  <div class="topbar-title">Aktivasi</div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <div class="header-label">Paket Langganan</div>
+    <h1 class="header-title">Pilih Paket Anda</h1>
+    <p class="header-subtitle">Upgrade untuk membuka semua fitur premium</p>
+  </div>
+
+  <div class="status-card">
+    <div class="status-icon">⭐</div>
+    <div class="status-info">
+      <div class="status-title">Paket Saat Ini: Premium</div>
+      <div class="status-desc">Aktif sampai 15 Agustus 2027 · Semua fitur tersedia</div>
+    </div>
+    <div class="status-badge">AKTIF</div>
+  </div>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-name">Starter</div>
+      <div class="pricing-price">Gratis<span>/selamanya</span></div>
+      <div class="pricing-desc">Cocok untuk undangan sederhana</div>
+      <ul class="pricing-features">
+        <li>1 undangan aktif</li>
+        <li>3 tema dasar</li>
+        <li>Upload 5 foto</li>
+        <li>RSVP dasar</li>
+        <li>Durasi 30 hari</li>
+      </ul>
+      <button class="pricing-btn outline">Paket Saat Ini</button>
+    </div>
+    <div class="pricing-card popular">
+      <div class="pricing-name">Premium</div>
+      <div class="pricing-price">Rp99.000<span>/undangan</span></div>
+      <div class="pricing-desc">Paling populer untuk pernikahan</div>
+      <ul class="pricing-features">
+        <li>Undangan aktif selamanya</li>
+        <li>Semua tema premium</li>
+        <li>Upload foto unlimited</li>
+        <li>Musik latar + galeri</li>
+        <li>Amplop digital</li>
+        <li>Google Maps & RSVP lengkap</li>
+        <li>Custom domain</li>
+      </ul>
+      <a href="checkout.html?plan=premium" class="pricing-btn">Perpanjang Premium</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

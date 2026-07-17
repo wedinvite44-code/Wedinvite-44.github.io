@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pusat Bantuan — WedInvite</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0a1a; --navy-light:#141428; --navy-mid:#1e1e3f;
+  --gold:#c9a96e; --gold-light:#e8d5b0; --gold-bright:#f0d78c;
+  --cream:#faf7f2; --white:#fff; --gray:#8a8a9a; --gray-light:#e8e8ee;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
+
+.topbar { background:var(--navy-light); border-bottom:1px solid rgba(201,169,110,.1); padding:16px 32px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+.topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; }
+.topbar-back:hover { color:var(--gold); }
+.topbar-back svg { width:20px; height:20px; }
+.topbar-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; }
+
+.container { max-width:700px; margin:0 auto; padding:48px 24px 80px; }
+.header { text-align:center; margin-bottom:40px; }
+.header-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.header-title { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; margin-bottom:12px; }
+.header-subtitle { font-size:15px; color:var(--gray); }
+
+.search-box { position:relative; margin-bottom:40px; }
+.search-input { width:100%; padding:16px 20px 16px 48px; background:var(--navy-light); border:1.5px solid rgba(201,169,110,.15); border-radius:14px; font-size:15px; color:var(--white); font-family:'Inter',sans-serif; transition:all .3s; }
+.search-input:focus { outline:none; border-color:var(--gold); }
+.search-input::placeholder { color:var(--gray); }
+.search-icon { position:absolute; left:18px; top:50%; transform:translateY(-50%); font-size:18px; color:var(--gray); }
+
+.faq-item { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:16px; margin-bottom:12px; overflow:hidden; transition:all .3s; }
+.faq-item:hover { border-color:rgba(201,169,110,.2); }
+.faq-question { padding:20px 24px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-size:15px; font-weight:600; }
+.faq-question::after { content:'+'; font-size:20px; color:var(--gold); transition:transform .3s; }
+.faq-item.open .faq-question::after { content:'−'; }
+.faq-answer { padding:0 24px; max-height:0; overflow:hidden; transition:all .3s; font-size:14px; color:var(--gray); line-height:1.8; }
+.faq-item.open .faq-answer { padding:0 24px 20px; max-height:200px; }
+
+.contact-card { background:linear-gradient(135deg, rgba(201,169,110,.1), rgba(201,169,110,.05)); border:1px solid rgba(201,169,110,.15); border-radius:20px; padding:32px; text-align:center; margin-top:40px; }
+.contact-card-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; margin-bottom:8px; }
+.contact-card-desc { font-size:14px; color:var(--gray); margin-bottom:20px; }
+.contact-btn { padding:14px 32px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+.contact-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+
+@media (max-width:640px) {
+  .container { padding:24px 20px 80px; }
+  .header-title { font-size:26px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="topbar-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Beranda
+  </a>
+  <div class="topbar-title">Pusat Bantuan</div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <div class="header-label">Butuh Bantuan?</div>
+    <h1 class="header-title">Pusat Bantuan</h1>
+    <p class="header-subtitle">Temukan jawaban untuk pertanyaan umum</p>
+  </div>
+
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" placeholder="Cari pertanyaan...">
+  </div>
+
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-question">Bagaimana cara membuat undangan digital?</div>
+    <div class="faq-answer">Klik tombol "Buat Undangan" di beranda atau dashboard, isi data mempelai dan detail acara, pilih tema, lalu simpan. Undangan Anda siap dibagikan!</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-question">Apakah bisa mengganti tema setelah dibuat?</div>
+    <div class="faq-answer">Ya, Anda bisa mengganti tema kapan saja melalui menu Template di dashboard. Semua data akan tetap terjaga.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-question">Berapa lama undangan bisa diakses?</div>
+    <div class="faq-answer">Paket Starter aktif 30 hari. Paket Premium aktif selamanya tanpa batas waktu.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-question">Bagaimana cara bagikan undangan?</div>
+    <div class="faq-answer">Setelah undangan dibuat, klik menu "Bagikan" untuk mendapatkan link dan QR code yang bisa dibagikan ke WhatsApp, Instagram, dan media sosial lainnya.</div>
+  </div>
+  <div class="faq-item" onclick="this.classList.toggle('open')">
+    <div class="faq-question">Apakah ada batasan upload foto?</div>
+    <div class="faq-answer">Paket Starter: 5 foto. Paket Premium: unlimited foto dengan kualitas tinggi.</div>
+  </div>
+
+  <div class="contact-card" id="contact">
+    <div class="contact-card-title">Masih Butuh Bantuan?</div>
+    <div class="contact-card-desc">Tim kami siap membantu Anda 24/7</div>
+    <a href="https://wa.me/6281234567890" target="_blank" class="contact-btn">💬 Hubungi Kami via WhatsApp</a>
+  </div>
+</div>
+
+</body>
+</html>

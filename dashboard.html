@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dashboard — WedInvite</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0a1a; --navy-light:#141428; --navy-mid:#1e1e3f;
+  --gold:#c9a96e; --gold-light:#e8d5b0; --gold-bright:#f0d78c;
+  --cream:#faf7f2; --white:#fff; --gray:#8a8a9a; --gray-light:#e8e8ee;
+  --success:#22c55e; --error:#ef4444; --warning:#f59e0b;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
+
+/* ============ SIDEBAR ============ */
+.sidebar { position:fixed; left:0; top:0; bottom:0; width:260px; background:var(--navy-light); border-right:1px solid rgba(201,169,110,.1); padding:24px 0; z-index:100; display:flex; flex-direction:column; }
+.sidebar-brand { padding:0 24px 24px; font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:1px; text-decoration:none; display:block; }
+.sidebar-brand span { color:var(--white); font-weight:400; }
+.sidebar-nav { flex:1; padding:0 16px; }
+.sidebar-item { display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:10px; color:rgba(255,255,255,.6); text-decoration:none; font-size:14px; font-weight:500; transition:all .3s; margin-bottom:4px; }
+.sidebar-item:hover, .sidebar-item.active { background:rgba(201,169,110,.1); color:var(--gold); }
+.sidebar-item svg { width:20px; height:20px; flex-shrink:0; }
+.sidebar-divider { height:1px; background:rgba(255,255,255,.05); margin:16px; }
+.sidebar-bottom { padding:0 24px; }
+.sidebar-user { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:rgba(201,169,110,.05); border:1px solid rgba(201,169,110,.1); }
+.sidebar-user-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--gold), #b8944f); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:var(--navy); }
+.sidebar-user-name { font-size:13px; font-weight:600; color:var(--white); }
+.sidebar-user-plan { font-size:11px; color:var(--gold); }
+
+/* ============ MAIN CONTENT ============ */
+.main { margin-left:260px; min-height:100vh; }
+.main-header { padding:20px 32px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(201,169,110,.1); background:var(--navy); position:sticky; top:0; z-index:90; }
+.main-header-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; }
+.main-header-actions { display:flex; gap:12px; align-items:center; }
+.main-header-btn { padding:10px 20px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.main-header-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.25); }
+.main-header-btn.outline { background:transparent; border:1.5px solid rgba(255,255,255,.15); color:var(--white); }
+.main-header-btn.outline:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ============ STATS ============ */
+.stats { padding:32px; display:grid; grid-template-columns:repeat(4, 1fr); gap:20px; }
+.stat-card { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:16px; padding:24px; transition:all .3s; }
+.stat-card:hover { border-color:rgba(201,169,110,.2); transform:translateY(-2px); }
+.stat-label { font-size:12px; color:var(--gray); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; }
+.stat-value { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:var(--white); }
+.stat-change { font-size:12px; color:var(--success); margin-top:4px; display:flex; align-items:center; gap:4px; }
+.stat-change.down { color:var(--error); }
+
+/* ============ INVITATIONS ============ */
+.invitations { padding:0 32px 32px; }
+.invitations-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.invitations-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; }
+.invitations-filter { display:flex; gap:8px; }
+.invitations-filter-btn { padding:8px 16px; background:transparent; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:var(--gray); font-size:13px; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; }
+.invitations-filter-btn:hover, .invitations-filter-btn.active { background:rgba(201,169,110,.1); border-color:rgba(201,169,110,.3); color:var(--gold); }
+.invitations-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+.invitation-card { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:20px; overflow:hidden; transition:all .4s; }
+.invitation-card:hover { border-color:rgba(201,169,110,.25); transform:translateY(-4px); box-shadow:0 16px 50px rgba(0,0,0,.3); }
+.invitation-card-img { width:100%; height:160px; object-fit:cover; }
+.invitation-card-body { padding:20px; }
+.invitation-card-theme { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+.invitation-card-name { font-family:'Playfair Display',serif; font-size:18px; font-weight:600; margin-bottom:4px; }
+.invitation-card-date { font-size:13px; color:var(--gray); margin-bottom:16px; }
+.invitation-card-stats { display:flex; gap:16px; margin-bottom:16px; }
+.invitation-card-stat { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--gray); }
+.invitation-card-actions { display:flex; gap:8px; }
+.invitation-card-btn { flex:1; padding:10px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; border:none; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:4px; transition:all .3s; }
+.invitation-card-btn.primary { background:var(--gold); color:var(--navy); }
+.invitation-card-btn.primary:hover { background:var(--gold-light); }
+.invitation-card-btn.secondary { background:rgba(255,255,255,.05); color:var(--white); border:1px solid rgba(255,255,255,.1); }
+.invitation-card-btn.secondary:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ============ EMPTY STATE ============ */
+.empty-state { text-align:center; padding:80px 24px; }
+.empty-state-icon { font-size:64px; margin-bottom:20px; opacity:.3; }
+.empty-state-title { font-family:'Playfair Display',serif; font-size:24px; font-weight:600; margin-bottom:8px; }
+.empty-state-desc { font-size:14px; color:var(--gray); margin-bottom:24px; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1024px) {
+  .sidebar { transform:translateX(-100%); transition:transform .3s; }
+  .sidebar.open { transform:translateX(0); }
+  .main { margin-left:0; }
+  .stats { grid-template-columns:repeat(2, 1fr); }
+  .invitations-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <a href="index.html" class="sidebar-brand">Wed<span>Invite</span></a>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="sidebar-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="create-invitation.html" class="sidebar-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Buat Undangan
+    </a>
+    <a href="themes.html" class="sidebar-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Template
+    </a>
+    <a href="guests.html" class="sidebar-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Daftar Tamu
+    </a>
+    <a href="settings.html" class="sidebar-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 5 15.34a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Pengaturan
+    </a>
+    <div class="sidebar-divider"></div>
+    <a href="help.html" class="sidebar-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Bantuan
+    </a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar">IP</div>
+      <div>
+        <div class="sidebar-user-name">Ican Pratama</div>
+        <div class="sidebar-user-plan">⭐ Premium</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main">
+  <header class="main-header">
+    <h1 class="main-header-title">Dashboard</h1>
+    <div class="main-header-actions">
+      <a href="index.html" class="main-header-btn outline">🏠 Beranda</a>
+      <a href="create-invitation.html" class="main-header-btn">+ Undangan Baru</a>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Total Undangan</div>
+      <div class="stat-value">3</div>
+      <div class="stat-change">↑ 1 bulan ini</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Dibuka</div>
+      <div class="stat-value">1.247</div>
+      <div class="stat-change">↑ 23% minggu ini</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">RSVP Hadir</div>
+      <div class="stat-value">89</div>
+      <div class="stat-change">↑ 12 baru</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Ucapan Masuk</div>
+      <div class="stat-value">156</div>
+      <div class="stat-change">↑ 8 baru</div>
+    </div>
+  </div>
+
+  <!-- Invitations -->
+  <div class="invitations">
+    <div class="invitations-header">
+      <h2 class="invitations-title">Undangan Saya</h2>
+      <div class="invitations-filter">
+        <button class="invitations-filter-btn active">Semua</button>
+        <button class="invitations-filter-btn">Aktif</button>
+        <button class="invitations-filter-btn">Draft</button>
+      </div>
+    </div>
+    <div class="invitations-grid">
+      <div class="invitation-card">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=300&fit=crop" class="invitation-card-img" alt="Royal Navy Gold">
+        <div class="invitation-card-body">
+          <div class="invitation-card-theme">Royal Navy Gold</div>
+          <div class="invitation-card-name">Ican & Faiza</div>
+          <div class="invitation-card-date">15 Agustus 2026</div>
+          <div class="invitation-card-stats">
+            <span class="invitation-card-stat">👁 842</span>
+            <span class="invitation-card-stat">✅ 89</span>
+            <span class="invitation-card-stat">💬 156</span>
+          </div>
+          <div class="invitation-card-actions">
+            <a href="editor.html?id=1" class="invitation-card-btn primary">✏️ Edit</a>
+            <a href="share.html?id=1" class="invitation-card-btn secondary">🔗 Bagikan</a>
+          </div>
+        </div>
+      </div>
+      <div class="invitation-card">
+        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&h=300&fit=crop" class="invitation-card-img" alt="Rustic Garden">
+        <div class="invitation-card-body">
+          <div class="invitation-card-theme">Rustic Garden</div>
+          <div class="invitation-card-name">Budi & Sari</div>
+          <div class="invitation-card-date">22 September 2026</div>
+          <div class="invitation-card-stats">
+            <span class="invitation-card-stat">👁 405</span>
+            <span class="invitation-card-stat">✅ 34</span>
+            <span class="invitation-card-stat">💬 67</span>
+          </div>
+          <div class="invitation-card-actions">
+            <a href="editor.html?id=2" class="invitation-card-btn primary">✏️ Edit</a>
+            <a href="share.html?id=2" class="invitation-card-btn secondary">🔗 Bagikan</a>
+          </div>
+        </div>
+      </div>
+      <div class="invitation-card" style="border:2px dashed rgba(201,169,110,.2); background:transparent;">
+        <div class="empty-state" style="padding:40px 24px;">
+          <div class="empty-state-icon">➕</div>
+          <div class="empty-state-title" style="font-size:16px;">Undangan Baru</div>
+          <div class="empty-state-desc" style="font-size:13px;">Buat undangan pernikahan digital Anda</div>
+          <a href="create-invitation.html" class="invitation-card-btn primary" style="margin-top:12px;">+ Buat Sekarang</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

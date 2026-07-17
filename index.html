@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WedInvite — Undangan Pernikahan Digital Eksklusif</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a0a1a; --navy-light:#141428; --navy-mid:#1e1e3f;
+  --gold:#c9a96e; --gold-light:#e8d5b0; --gold-bright:#f0d78c;
+  --cream:#faf7f2; --white:#fff; --gray:#8a8a9a; --gray-light:#e8e8ee;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; color:var(--white); background:var(--navy); overflow-x:hidden; }
+
+/* ============ NAVBAR ============ */
+.nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; transition:all .4s; }
+.nav.scrolled { background:rgba(10,10,26,.95); backdrop-filter:blur(20px); border-bottom:1px solid rgba(201,169,110,.15); }
+.nav-logo { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:1px; }
+.nav-logo span { color:var(--white); font-weight:400; }
+.nav-links { display:flex; gap:32px; align-items:center; }
+.nav-links a { color:rgba(255,255,255,.7); text-decoration:none; font-size:14px; font-weight:500; transition:all .3s; position:relative; }
+.nav-links a:hover { color:var(--gold); }
+.nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1.5px; background:var(--gold); transition:width .3s; }
+.nav-links a:hover::after { width:100%; }
+.nav-cta { padding:10px 24px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-block; }
+.nav-cta:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+.nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+.nav-hamburger span { width:24px; height:2px; background:var(--white); transition:all .3s; }
+
+/* ============ HERO ============ */
+.hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; padding:120px 24px 80px; text-align:center; background:linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 50%, var(--navy) 100%); overflow:hidden; }
+.hero::before { content:''; position:absolute; inset:0; background:url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80'); background-size:cover; background-position:center; opacity:.12; }
+.hero::after { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle at 30% 50%, rgba(201,169,110,.08) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(201,169,110,.05) 0%, transparent 50%); }
+.hero-content { position:relative; z-index:2; max-width:700px; }
+.hero-badge { display:inline-flex; align-items:center; gap:8px; padding:8px 20px; border:1px solid rgba(201,169,110,.3); border-radius:50px; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:32px; background:rgba(201,169,110,.05); }
+.hero-badge::before { content:''; width:6px; height:6px; background:var(--gold); border-radius:50%; animation:pulse-dot 2s infinite; }
+@keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+.hero-title { font-family:'Playfair Display',serif; font-size:52px; font-weight:700; line-height:1.15; margin-bottom:20px; color:var(--white); }
+.hero-title em { font-style:italic; color:var(--gold); }
+.hero-subtitle { font-size:17px; color:rgba(255,255,255,.6); line-height:1.8; margin-bottom:40px; max-width:520px; margin-left:auto; margin-right:auto; }
+.hero-cta-group { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+.hero-cta-primary { padding:16px 36px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+.hero-cta-primary:hover { transform:translateY(-3px); box-shadow:0 12px 35px rgba(201,169,110,.35); }
+.hero-cta-secondary { padding:16px 36px; background:transparent; color:var(--white); border:1.5px solid rgba(255,255,255,.2); border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+.hero-cta-secondary:hover { border-color:var(--gold); color:var(--gold); }
+.hero-scroll { position:absolute; bottom:32px; left:50%; transform:translateX(-50%); animation:bounce 2s infinite; opacity:.5; }
+@keyframes bounce { 0%,20%,50%,80%,100% { transform:translateX(-50%) translateY(0); } 40% { transform:translateX(-50%) translateY(-10px); } 60% { transform:translateX(-50%) translateY(-5px); } }
+
+/* ============ TRUST BAR ============ */
+.trust-bar { background:var(--navy-light); padding:40px 24px; text-align:center; border-top:1px solid rgba(201,169,110,.1); border-bottom:1px solid rgba(201,169,110,.1); }
+.trust-bar-title { font-size:13px; letter-spacing:3px; text-transform:uppercase; color:var(--gray); margin-bottom:24px; }
+.trust-bar-logos { display:flex; justify-content:center; gap:48px; align-items:center; flex-wrap:wrap; }
+.trust-bar-logo { font-family:'Playfair Display',serif; font-size:18px; color:rgba(255,255,255,.25); font-weight:600; }
+
+/* ============ FEATURES ============ */
+.features { padding:100px 24px; max-width:1100px; margin:0 auto; }
+.features-header { text-align:center; margin-bottom:60px; }
+.features-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.features-title { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; margin-bottom:16px; }
+.features-subtitle { font-size:16px; color:var(--gray); max-width:500px; margin:0 auto; }
+.features-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+.feature-card { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:20px; padding:36px 28px; transition:all .4s; position:relative; overflow:hidden; }
+.feature-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, transparent, var(--gold), transparent); opacity:0; transition:opacity .4s; }
+.feature-card:hover { transform:translateY(-8px); border-color:rgba(201,169,110,.25); box-shadow:0 20px 60px rgba(0,0,0,.3); }
+.feature-card:hover::before { opacity:1; }
+.feature-icon { width:56px; height:56px; background:linear-gradient(135deg, rgba(201,169,110,.15), rgba(201,169,110,.05)); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:20px; }
+.feature-title { font-size:17px; font-weight:700; margin-bottom:10px; color:var(--white); }
+.feature-desc { font-size:14px; color:var(--gray); line-height:1.7; }
+
+/* ============ PREVIEW ============ */
+.preview { padding:100px 24px; background:linear-gradient(180deg, var(--navy-mid) 0%, var(--navy) 100%); position:relative; overflow:hidden; }
+.preview::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(201,169,110,.3), transparent); }
+.preview-container { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.preview-content { }
+.preview-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.preview-title { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; margin-bottom:20px; line-height:1.2; }
+.preview-desc { font-size:16px; color:var(--gray); line-height:1.8; margin-bottom:32px; }
+.preview-list { list-style:none; }
+.preview-list li { display:flex; align-items:center; gap:12px; margin-bottom:16px; font-size:15px; color:rgba(255,255,255,.8); }
+.preview-list li::before { content:'✓'; width:24px; height:24px; background:rgba(201,169,110,.15); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--gold); font-weight:700; flex-shrink:0; }
+.preview-phone { position:relative; }
+.preview-phone-frame { width:280px; height:560px; background:var(--navy); border-radius:36px; border:8px solid rgba(201,169,110,.3); margin:0 auto; overflow:hidden; position:relative; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+.preview-phone-screen { width:100%; height:100%; background:linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%); padding:24px 16px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+.preview-phone-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.preview-phone-names { font-family:'Great Vibes',cursive; font-size:32px; color:var(--gold-light); margin-bottom:8px; }
+.preview-phone-date { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.6); margin-bottom:20px; }
+.preview-phone-btn { padding:10px 28px; background:var(--gold); color:var(--navy); border:none; border-radius:50px; font-size:12px; font-weight:700; }
+
+/* ============ TEMPLATES ============ */
+.templates { padding:100px 24px; max-width:1100px; margin:0 auto; }
+.templates-header { text-align:center; margin-bottom:60px; }
+.templates-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.templates-title { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; margin-bottom:16px; }
+.templates-subtitle { font-size:16px; color:var(--gray); }
+.templates-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+.template-card { border-radius:20px; overflow:hidden; position:relative; cursor:pointer; transition:all .4s; border:1px solid rgba(201,169,110,.1); }
+.template-card:hover { transform:translateY(-8px); box-shadow:0 20px 60px rgba(0,0,0,.4); border-color:rgba(201,169,110,.3); }
+.template-img { width:100%; height:220px; object-fit:cover; }
+.template-overlay { position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(10,10,26,.95) 100%); display:flex; flex-direction:column; justify-content:flex-end; padding:20px; }
+.template-name { font-family:'Playfair Display',serif; font-size:18px; font-weight:600; color:var(--white); margin-bottom:4px; }
+.template-tag { font-size:12px; color:var(--gold); }
+
+/* ============ PRICING ============ */
+.pricing { padding:100px 24px; background:var(--navy-light); position:relative; }
+.pricing::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(201,169,110,.2), transparent); }
+.pricing-container { max-width:900px; margin:0 auto; }
+.pricing-header { text-align:center; margin-bottom:60px; }
+.pricing-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.pricing-title { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; margin-bottom:16px; }
+.pricing-subtitle { font-size:16px; color:var(--gray); }
+.pricing-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.pricing-card { background:var(--navy); border:1px solid rgba(201,169,110,.1); border-radius:24px; padding:40px; transition:all .4s; position:relative; }
+.pricing-card.popular { border-color:rgba(201,169,110,.4); background:linear-gradient(180deg, var(--navy) 0%, rgba(201,169,110,.05) 100%); }
+.pricing-card.popular::before { content:'PALING POPULER'; position:absolute; top:-12px; left:50%; transform:translateX(-50%); padding:6px 20px; background:var(--gold); color:var(--navy); font-size:11px; font-weight:700; letter-spacing:1px; border-radius:50px; }
+.pricing-card:hover { transform:translateY(-4px); }
+.pricing-card-name { font-size:14px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+.pricing-card-price { font-family:'Playfair Display',serif; font-size:42px; font-weight:700; margin-bottom:4px; }
+.pricing-card-price span { font-size:16px; color:var(--gray); font-weight:400; font-family:'Inter',sans-serif; }
+.pricing-card-desc { font-size:14px; color:var(--gray); margin-bottom:28px; }
+.pricing-card-features { list-style:none; margin-bottom:32px; }
+.pricing-card-features li { display:flex; align-items:center; gap:10px; margin-bottom:12px; font-size:14px; color:rgba(255,255,255,.8); }
+.pricing-card-features li::before { content:'✓'; color:var(--gold); font-weight:700; }
+.pricing-card-btn { width:100%; padding:14px; background:var(--gold); color:var(--navy); border:none; border-radius:12px; font-size:15px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:block; text-align:center; }
+.pricing-card-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+.pricing-card-btn.outline { background:transparent; border:1.5px solid rgba(255,255,255,.2); color:var(--white); }
+.pricing-card-btn.outline:hover { border-color:var(--gold); color:var(--gold); }
+
+/* ============ TESTIMONIALS ============ */
+.testimonials { padding:100px 24px; max-width:900px; margin:0 auto; }
+.testimonials-header { text-align:center; margin-bottom:60px; }
+.testimonials-label { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.testimonials-title { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; margin-bottom:16px; }
+.testimonials-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:24px; }
+.testimonial-card { background:var(--navy-light); border:1px solid rgba(201,169,110,.1); border-radius:20px; padding:32px; transition:all .3s; }
+.testimonial-card:hover { border-color:rgba(201,169,110,.2); }
+.testimonial-stars { color:var(--gold); font-size:16px; margin-bottom:16px; letter-spacing:2px; }
+.testimonial-text { font-family:'Cormorant Garamond',serif; font-size:18px; font-style:italic; line-height:1.7; color:rgba(255,255,255,.85); margin-bottom:20px; }
+.testimonial-author { display:flex; align-items:center; gap:12px; }
+.testimonial-avatar { width:44px; height:44px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); }
+.testimonial-name { font-size:14px; font-weight:700; color:var(--white); }
+.testimonial-role { font-size:12px; color:var(--gray); }
+
+/* ============ CTA SECTION ============ */
+.cta-section { padding:100px 24px; text-align:center; background:linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%); position:relative; overflow:hidden; }
+.cta-section::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(201,169,110,.3), transparent); }
+.cta-section::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 50%, rgba(201,169,110,.06) 0%, transparent 60%); }
+.cta-content { position:relative; z-index:2; max-width:600px; margin:0 auto; }
+.cta-title { font-family:'Playfair Display',serif; font-size:40px; font-weight:700; margin-bottom:20px; }
+.cta-subtitle { font-size:17px; color:var(--gray); line-height:1.8; margin-bottom:36px; }
+.cta-btn { padding:18px 48px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+.cta-btn:hover { transform:translateY(-3px); box-shadow:0 15px 40px rgba(201,169,110,.35); }
+
+/* ============ FOOTER ============ */
+.footer { padding:60px 24px 24px; background:var(--navy); border-top:1px solid rgba(201,169,110,.1); }
+.footer-container { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; }
+.footer-brand { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--gold); margin-bottom:12px; }
+.footer-desc { font-size:14px; color:var(--gray); line-height:1.7; margin-bottom:20px; }
+.footer-social { display:flex; gap:12px; }
+.footer-social a { width:40px; height:40px; border-radius:10px; background:rgba(201,169,110,.1); display:flex; align-items:center; justify-content:center; color:var(--gold); text-decoration:none; font-size:16px; transition:all .3s; }
+.footer-social a:hover { background:var(--gold); color:var(--navy); }
+.footer-title { font-size:14px; font-weight:700; color:var(--white); margin-bottom:16px; letter-spacing:1px; }
+.footer-links { list-style:none; }
+.footer-links li { margin-bottom:10px; }
+.footer-links a { color:var(--gray); text-decoration:none; font-size:14px; transition:all .3s; }
+.footer-links a:hover { color:var(--gold); }
+.footer-bottom { max-width:1100px; margin:40px auto 0; padding-top:24px; border-top:1px solid rgba(255,255,255,.05); text-align:center; font-size:13px; color:var(--gray); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:768px) {
+  .nav-links { display:none; }
+  .nav-hamburger { display:flex; }
+  .hero-title { font-size:36px; }
+  .features-grid, .templates-grid, .testimonials-grid { grid-template-columns:1fr; }
+  .preview-container { grid-template-columns:1fr; }
+  .pricing-grid { grid-template-columns:1fr; }
+  .footer-container { grid-template-columns:1fr; text-align:center; }
+  .footer-social { justify-content:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="nav" id="navbar">
+  <a href="index.html" class="nav-logo">Wed<span>Invite</span></a>
+  <div class="nav-links">
+    <a href="index.html#features">Fitur</a>
+    <a href="index.html#templates">Template</a>
+    <a href="index.html#pricing">Harga</a>
+    <a href="help.html">Bantuan</a>
+    <a href="dashboard.html" class="nav-cta">Dashboard</a>
+  </div>
+  <div class="nav-hamburger" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Undangan Digital No.1 Indonesia</div>
+    <h1 class="hero-title">Buat Undangan Pernikahan <em>Eksklusif</em> dalam Hitungan Menit</h1>
+    <p class="hero-subtitle">Desain elegan dengan tema Royal Navy Gold. Bagikan momen bahagia Anda dengan cara yang modern, praktis, dan berkesan.</p>
+    <div class="hero-cta-group">
+      <a href="create-invitation.html" class="hero-cta-primary">✨ Buat Undangan Gratis</a>
+      <a href="index.html#templates" class="hero-cta-secondary">Lihat Template</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+  </div>
+</section>
+
+<!-- Trust Bar -->
+<div class="trust-bar">
+  <div class="trust-bar-title">Dipercaya oleh ribuan pasangan</div>
+  <div class="trust-bar-logos">
+    <span class="trust-bar-logo">The Wedding</span>
+    <span class="trust-bar-logo">Bridestory</span>
+    <span class="trust-bar-logo">Weddingku</span>
+    <span class="trust-bar-logo">NOVA</span>
+  </div>
+</div>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="features-header">
+    <div class="features-label">Mengapa WedInvite</div>
+    <h2 class="features-title">Segala yang Anda Butuhkan</h2>
+    <p class="features-subtitle">Semua fitur penting untuk undangan pernikahan digital yang sempurna</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">Responsif & Mobile-First</div>
+      <div class="feature-desc">Tampilan sempurna di semua perangkat — smartphone, tablet, maupun desktop.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <div class="feature-title">8 Tema Eksklusif</div>
+      <div class="feature-desc">Pilih dari koleksi tema premium: Royal Navy Gold, Rustic, Minimalist, Floral, dan lainnya.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📷</div>
+      <div class="feature-title">Upload Foto Unlimited</div>
+      <div class="feature-desc">Galeri foto pre-wedding, couple shot, dan momen berharga lainnya tanpa batas.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎵</div>
+      <div class="feature-title">Musik Latar</div>
+      <div class="feature-desc">Tambahkan lagu favorit Anda untuk pengalaman yang lebih emosional dan berkesan.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📍</div>
+      <div class="feature-title">Google Maps Terintegrasi</div>
+      <div class="feature-desc">Tamu bisa langsung navigasi ke lokasi acara dengan satu klik.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✅</div>
+      <div class="feature-title">RSVP & Ucapan</div>
+      <div class="feature-desc">Kelola daftar tamu, konfirmasi kehadiran, dan terima ucapan doa secara real-time.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Preview -->
+<section class="preview" id="preview">
+  <div class="preview-container">
+    <div class="preview-content">
+      <div class="preview-label">Tampilan Live</div>
+      <h2 class="preview-title">Seperti yang Dilihat Tamu Anda</h2>
+      <p class="preview-desc">Undangan digital yang elegan dengan scroll otomatis, animasi halus, dan desain yang memukau di setiap section.</p>
+      <ul class="preview-list">
+        <li>Cover pembuka dengan animasi nama pasangan</li>
+        <li>Countdown timer live menuju hari H</li>
+        <li>Galeri foto dengan lightbox</li>
+        <li>Amplop digital untuk transfer</li>
+      </ul>
+    </div>
+    <div class="preview-phone">
+      <div class="preview-phone-frame">
+        <div class="preview-phone-screen">
+          <div class="preview-phone-label">The Wedding of</div>
+          <div class="preview-phone-names">Ican & Faiza</div>
+          <div class="preview-phone-date">15 Agustus 2026</div>
+          <div class="preview-phone-btn">Buka Undangan</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Templates -->
+<section class="templates" id="templates">
+  <div class="templates-header">
+    <div class="templates-label">Koleksi Template</div>
+    <h2 class="templates-title">Pilih Tema Favorit Anda</h2>
+    <p class="templates-subtitle">Setiap tema dirancang dengan cermat untuk berbagai selera dan konsep pernikahan</p>
+  </div>
+  <div class="templates-grid">
+    <div class="template-card" onclick="location.href='themes.html?theme=royal-navy-gold'">
+      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=400&fit=crop" class="template-img" alt="Royal Navy Gold">
+      <div class="template-overlay">
+        <div class="template-name">Royal Navy Gold</div>
+        <div class="template-tag">Elegan · Klasik</div>
+      </div>
+    </div>
+    <div class="template-card" onclick="location.href='themes.html?theme=rustic-garden'">
+      <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&h=400&fit=crop" class="template-img" alt="Rustic Garden">
+      <div class="template-overlay">
+        <div class="template-name">Rustic Garden</div>
+        <div class="template-tag">Alami · Romantis</div>
+      </div>
+    </div>
+    <div class="template-card" onclick="location.href='themes.html?theme=minimalist-white'">
+      <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&h=400&fit=crop" class="template-img" alt="Minimalist White">
+      <div class="template-overlay">
+        <div class="template-name">Minimalist White</div>
+        <div class="template-tag">Sederhana · Modern</div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:32px;">
+    <a href="themes.html" class="hero-cta-secondary">Lihat Semua Template →</a>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="pricing-container">
+    <div class="pricing-header">
+      <div class="pricing-label">Paket Harga</div>
+      <h2 class="pricing-title">Pilih Paket yang Sesuai</h2>
+      <p class="pricing-subtitle">Mulai dari gratis hingga premium dengan fitur lengkap</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-card-name">Starter</div>
+        <div class="pricing-card-price">Gratis<span>/selamanya</span></div>
+        <div class="pricing-card-desc">Cocok untuk undangan sederhana</div>
+        <ul class="pricing-card-features">
+          <li>1 undangan aktif</li>
+          <li>3 tema dasar</li>
+          <li>Upload 5 foto</li>
+          <li>RSVP dasar</li>
+          <li>Durasi 30 hari</li>
+        </ul>
+        <a href="create-invitation.html" class="pricing-card-btn outline">Mulai Gratis</a>
+      </div>
+      <div class="pricing-card popular">
+        <div class="pricing-card-name">Premium</div>
+        <div class="pricing-card-price">Rp99.000<span>/undangan</span></div>
+        <div class="pricing-card-desc">Paling populer untuk pernikahan</div>
+        <ul class="pricing-card-features">
+          <li>Undangan aktif selamanya</li>
+          <li>Semua tema premium</li>
+          <li>Upload foto unlimited</li>
+          <li>Musik latar + galeri</li>
+          <li>Amplop digital</li>
+          <li>Google Maps & RSVP lengkap</li>
+          <li>Custom domain</li>
+        </ul>
+        <a href="checkout.html?plan=premium" class="pricing-card-btn">Pilih Premium</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="testimonials-header">
+    <div class="testimonials-label">Testimoni</div>
+    <h2 class="testimonials-title">Kata Mereka tentang WedInvite</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"Undangannya sangat elegan dan mudah dibagikan. Semua tamu bilang cantik banget! Prosesnya juga super gampang."</div>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" class="testimonial-avatar" alt="Rina">
+        <div>
+          <div class="testimonial-name">Rina & Andi</div>
+          <div class="testimonial-role">Jakarta — Royal Navy Gold</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"Fitur RSVP dan amplop digitalnya sangat membantu. Kami bisa mengatur tamu dengan rapi dan menerima doa yang menyentuh hati."</div>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" class="testimonial-avatar" alt="Budi">
+        <div>
+          <div class="testimonial-name">Budi & Sari</div>
+          <div class="testimonial-role">Surabaya — Rustic Garden</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-content">
+    <h2 class="cta-title">Siap Membuat Undangan Anda?</h2>
+    <p class="cta-subtitle">Mulai dari gratis. Upgrade kapan saja. Tanpa kartu kredit diperlukan untuk mencoba.</p>
+    <a href="create-invitation.html" class="cta-btn">✨ Buat Undangan Sekarang</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div>
+      <div class="footer-brand">WedInvite</div>
+      <p class="footer-desc">Platform undangan pernikahan digital terbaik di Indonesia. Membantu ribuan pasangan membagikan momen bahagia mereka dengan cara yang modern dan berkesan.</p>
+      <div class="footer-social">
+        <a href="#">📷</a>
+        <a href="#">💬</a>
+        <a href="#">🐦</a>
+        <a href="#">▶️</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-title">Produk</div>
+      <ul class="footer-links">
+        <li><a href="themes.html">Template</a></li>
+        <li><a href="index.html#pricing">Harga</a></li>
+        <li><a href="create-invitation.html">Buat Undangan</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-title">Perusahaan</div>
+      <ul class="footer-links">
+        <li><a href="help.html">Pusat Bantuan</a></li>
+        <li><a href="help.html#contact">Hubungi Kami</a></li>
+        <li><a href="#">Tentang Kami</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-title">Legal</div>
+      <ul class="footer-links">
+        <li><a href="#">Syarat & Ketentuan</a></li>
+        <li><a href="#">Kebijakan Privasi</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 WedInvite. Dibuat dengan ❤️ di Indonesia.
+  </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+</script>
+
+</body>
+</html>
