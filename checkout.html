@@ -59,17 +59,6 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
 </style>
 </head>
 <body>
-<script>
-function checkAuth() {
-  const user = localStorage.getItem('wedinvite_user');
-  if (!user) {
-    window.location.href = 'auth.html?redirect=checkout.html';
-    return;
-  }
-}
-checkAuth();
-</script>
-
 
 <div class="topbar">
   <a href="subscription.html" class="topbar-back">

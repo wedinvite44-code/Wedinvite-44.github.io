@@ -111,7 +111,19 @@ body { font-family:'Inter',sans-serif; color:var(--navy); background:var(--white
 </style>
 </head>
 <body>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const theme = urlParams.get('theme');
+if (theme === 'rustic-garden') {
+  window.location.href = 'invitation-rustic.html';
+}
+</script>
 
+<!-- Theme Navigation -->
+<div class="theme-nav" style="position:fixed; top:20px; left:20px; z-index:100; display:flex; gap:8px;">
+  <a href="invitation.html?theme=royal-navy-gold" class="theme-nav-btn" style="padding:8px 16px; background:rgba(10,10,26,.6); backdrop-filter:blur(10px); border:1px solid rgba(201,169,110,.3); border-radius:50px; color:#fff; font-size:12px; font-weight:600; cursor:pointer; text-decoration:none; transition:all .3s; font-family:'Inter',sans-serif;">Royal Navy</a>
+  <a href="invitation-rustic.html" class="theme-nav-btn" style="padding:8px 16px; background:rgba(10,10,26,.6); backdrop-filter:blur(10px); border:1px solid rgba(201,169,110,.3); border-radius:50px; color:#fff; font-size:12px; font-weight:600; cursor:pointer; text-decoration:none; transition:all .3s; font-family:'Inter',sans-serif;">Rustic Garden</a>
+</div>
 <div class="inv-opening">
   <div class="inv-opening-label">The Wedding of</div>
   <div class="inv-opening-names">Ican & Faiza</div>

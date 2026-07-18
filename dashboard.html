@@ -19,28 +19,23 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
 .sidebar { position:fixed; left:0; top:0; bottom:0; width:260px; background:var(--navy-light); border-right:1px solid rgba(201,169,110,.1); padding:24px 0; z-index:100; display:flex; flex-direction:column; }
 .sidebar-brand { padding:0 24px 24px; font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:1px; text-decoration:none; display:block; }
 .sidebar-brand span { color:var(--white); font-weight:400; }
-.sidebar-nav { flex:1; padding:12px 16px; }
-.sidebar-item { display:flex; align-items:center; gap:16px; padding:16px 20px; border-radius:12px; color:rgba(255,255,255,.6); text-decoration:none; font-size:14px; font-weight:500; transition:all .3s; margin-bottom:10px; }
+.sidebar-nav { flex:1; padding:0 16px; }
+.sidebar-item { display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:10px; color:rgba(255,255,255,.6); text-decoration:none; font-size:14px; font-weight:500; transition:all .3s; margin-bottom:4px; }
 .sidebar-item:hover, .sidebar-item.active { background:rgba(201,169,110,.1); color:var(--gold); }
 .sidebar-item svg { width:20px; height:20px; flex-shrink:0; }
-.sidebar-divider { height:1px; background:rgba(255,255,255,.08); margin:24px 16px; }
-.sidebar-bottom { padding:16px 24px; }
-.sidebar-user { display:flex; align-items:center; gap:14px; padding:14px; border-radius:12px; background:rgba(201,169,110,.05); border:1px solid rgba(201,169,110,.1); cursor:pointer; transition:all .3s; }
-.sidebar-user:hover { border-color:var(--gold); }
-.sidebar-user-avatar { width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); }
-.sidebar-user-initial { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--gold), #b8944f); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:var(--navy); }
+.sidebar-divider { height:1px; background:rgba(255,255,255,.05); margin:16px; }
+.sidebar-bottom { padding:0 24px; }
+.sidebar-user { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:rgba(201,169,110,.05); border:1px solid rgba(201,169,110,.1); }
+.sidebar-user-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--gold), #b8944f); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:var(--navy); }
 .sidebar-user-name { font-size:13px; font-weight:600; color:var(--white); }
 .sidebar-user-plan { font-size:11px; color:var(--gold); }
-.sidebar-logout { display:flex; align-items:center; gap:12px; padding:12px 16px; border-radius:10px; color:var(--error); text-decoration:none; font-size:13px; font-weight:600; transition:all .3s; margin-top:12px; cursor:pointer; border:none; background:none; width:100%; font-family:'Inter',sans-serif; }
-.sidebar-logout:hover { background:rgba(239,68,68,.1); }
-.sidebar-logout svg { width:18px; height:18px; flex-shrink:0; }
 
 /* ============ MAIN CONTENT ============ */
 .main { margin-left:260px; min-height:100vh; }
-.main-header { padding:16px 32px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(201,169,110,.1); background:var(--navy); position:sticky; top:0; z-index:90; gap:16px; }
-.main-header-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; white-space:nowrap; }
-.main-header-actions { display:flex; gap:10px; align-items:center; flex-shrink:0; }
-.main-header-btn { padding:10px 18px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+.main-header { padding:20px 32px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(201,169,110,.1); background:var(--navy); position:sticky; top:0; z-index:90; }
+.main-header-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; }
+.main-header-actions { display:flex; gap:12px; align-items:center; }
+.main-header-btn { padding:10px 20px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
 .main-header-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.25); }
 .main-header-btn.outline { background:transparent; border:1.5px solid rgba(255,255,255,.15); color:var(--white); }
 .main-header-btn.outline:hover { border-color:var(--gold); color:var(--gold); }
@@ -92,12 +87,6 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
   .stats { grid-template-columns:repeat(2, 1fr); }
   .invitations-grid { grid-template-columns:1fr; }
 }
-@media (max-width:640px) {
-  .main-header { padding:14px 16px; gap:10px; }
-  .main-header-title { font-size:18px; }
-  .main-header-btn { padding:8px 12px; font-size:12px; gap:4px; }
-  .main-header-actions { gap:8px; }
-}
 </style>
 </head>
 <body>
@@ -133,18 +122,13 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
     </a>
   </nav>
   <div class="sidebar-bottom">
-    <div class="sidebar-user" onclick="location.href='settings.html'">
-      <img src="" alt="Avatar" class="sidebar-user-avatar" id="sidebarAvatar" style="display:none;">
-      <div class="sidebar-user-initial" id="sidebarInitial">IP</div>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar">IP</div>
       <div>
-        <div class="sidebar-user-name" id="sidebarUserName">Ican Pratama</div>
+        <div class="sidebar-user-name">Ican Pratama</div>
         <div class="sidebar-user-plan">⭐ Premium</div>
       </div>
     </div>
-    <button class="sidebar-logout" onclick="handleLogout()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Keluar
-    </button>
   </div>
 </aside>
 
@@ -238,35 +222,6 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
     </div>
   </div>
 </main>
-
-<script>
-// ===== AUTH CHECK =====
-function checkAuth() {
-  const user = localStorage.getItem('wedinvite_user');
-  if (!user) {
-    window.location.href = 'auth.html?redirect=dashboard.html';
-    return;
-  }
-  const u = JSON.parse(user);
-  // Update sidebar user info
-  const nameEl = document.getElementById('sidebarUserName');
-  const avatarEl = document.getElementById('sidebarAvatar');
-  const initialEl = document.getElementById('sidebarInitial');
-  if (nameEl) nameEl.textContent = u.name;
-  if (avatarEl && u.avatar) {
-    avatarEl.src = u.avatar;
-    avatarEl.style.display = 'block';
-    if (initialEl) initialEl.style.display = 'none';
-  }
-}
-
-function handleLogout() {
-  localStorage.removeItem('wedinvite_user');
-  window.location.href = 'index.html';
-}
-
-checkAuth();
-</script>
 
 </body>
 </html>
