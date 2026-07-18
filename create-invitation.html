@@ -23,6 +23,9 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
 .topbar-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; }
 .topbar-step { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--gray); }
 .topbar-step-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); }
+.topbar-user { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.topbar-user-avatar { width:32px; height:32px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); }
+.topbar-user-name { font-size:13px; font-weight:600; color:var(--white); }
 
 /* ============ FORM CONTAINER ============ */
 .form-container { max-width:680px; margin:0 auto; padding:40px 24px 120px; }
@@ -300,6 +303,27 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
 </div>
 
 <script>
+// ===== AUTH CHECK =====
+function checkAuth() {
+  const user = localStorage.getItem('wedinvite_user');
+  if (!user) {
+    window.location.href = 'auth.html?redirect=create-invitation.html';
+    return;
+  }
+  // Update topbar with user info
+  const u = JSON.parse(user);
+  const topbar = document.querySelector('.topbar');
+  const stepEl = document.querySelector('.topbar-step');
+  if (topbar && stepEl) {
+    const userEl = document.createElement('a');
+    userEl.href = 'settings.html';
+    userEl.className = 'topbar-user';
+    userEl.innerHTML = `<img src="${u.avatar}" alt="${u.name}" class="topbar-user-avatar"><span class="topbar-user-name">${u.name.split(' ')[0]}</span>`;
+    topbar.insertBefore(userEl, stepEl);
+  }
+}
+checkAuth();
+
 let currentStep = 1;
 const totalSteps = 3;
 let selectedTheme = 'royal-navy-gold';

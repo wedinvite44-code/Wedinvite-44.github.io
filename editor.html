@@ -208,6 +208,25 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--navy)
 </style>
 </head>
 <body>
+<script>
+// ===== AUTH CHECK =====
+function checkAuth() {
+  const user = localStorage.getItem('wedinvite_user');
+  if (!user) {
+    window.location.href = 'auth.html?redirect=editor.html';
+    return;
+  }
+  const u = JSON.parse(user);
+  const topbarUser = document.getElementById('topbarUser');
+  const topbarAvatar = document.getElementById('topbarAvatar');
+  if (topbarUser && topbarAvatar) {
+    topbarAvatar.src = u.avatar;
+    topbarUser.style.display = 'flex';
+  }
+}
+checkAuth();
+</script>
+
 
 <!-- Toast -->
 <div class="ed-toast" id="toast"></div>
@@ -222,6 +241,9 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--navy)
   <div class="ed-topbar-actions">
     <a href="invitation.html" target="_blank" class="ed-topbar-btn outline">👁 Pratinjau</a>
     <button class="ed-topbar-btn" onclick="saveInvitation()">💾 Simpan</button>
+    <a href="settings.html" class="ed-topbar-user" id="topbarUser" style="display:none;">
+      <img src="" alt="User" class="ed-topbar-user-avatar" id="topbarAvatar">
+    </a>
   </div>
 </div>
 

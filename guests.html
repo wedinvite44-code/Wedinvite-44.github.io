@@ -52,6 +52,18 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
 </style>
 </head>
 <body>
+<script>
+// ===== AUTH CHECK =====
+function checkAuth() {
+  const user = localStorage.getItem('wedinvite_user');
+  if (!user) {
+    window.location.href = 'auth.html?redirect=guests.html';
+    return;
+  }
+}
+checkAuth();
+</script>
+
 
 <div class="topbar">
   <a href="dashboard.html" class="topbar-back">

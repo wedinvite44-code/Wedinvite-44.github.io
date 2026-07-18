@@ -279,7 +279,7 @@ function handleLogin(e) {
 
     showToast('✅ Berhasil masuk! Selamat datang kembali.', 'success');
     setTimeout(() => {
-      window.location.href = 'dashboard.html';
+      redirectAfterAuth();
     }, 1200);
   }, 1500);
 }
@@ -326,7 +326,7 @@ function handleRegister(e) {
 
     showToast('✅ Akun berhasil dibuat! Selamat datang di WedInvite.', 'success');
     setTimeout(() => {
-      window.location.href = 'dashboard.html';
+      redirectAfterAuth();
     }, 1500);
   }, 1800);
 }
@@ -360,7 +360,7 @@ function simulateGoogleLogin() {
 
     showToast('✅ Berhasil masuk dengan Google!', 'success');
     setTimeout(() => {
-      window.location.href = 'dashboard.html';
+      redirectAfterAuth();
     }, 1200);
   }, 1500);
 }
@@ -386,6 +386,17 @@ function handleGoogleCredentialResponse(response) {
   }, 1200);
 }
 
+// ===== REDIRECT HELPER =====
+function getRedirectUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('redirect') || 'dashboard.html';
+}
+
+function redirectAfterAuth() {
+  const redirect = getRedirectUrl();
+  window.location.href = redirect;
+}
+
 // ===== CHECK EXISTING SESSION =====
 window.addEventListener('DOMContentLoaded', () => {
   const user = localStorage.getItem('wedinvite_user');
@@ -400,8 +411,8 @@ window.addEventListener('DOMContentLoaded', () => {
     // Auto redirect after showing welcome back
     showToast('👋 Selamat datang kembali, ' + u.name.split(' ')[0] + '!', 'success');
     setTimeout(() => {
-      window.location.href = 'dashboard.html';
-    }, 2000);
+      redirectAfterAuth();
+    }, 1500);
   }
 });
 </script>

@@ -17,15 +17,20 @@ body { font-family:'Inter',sans-serif; color:var(--white); background:var(--navy
 /* ============ NAVBAR ============ */
 .nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; transition:all .4s; }
 .nav.scrolled { background:rgba(10,10,26,.95); backdrop-filter:blur(20px); border-bottom:1px solid rgba(201,169,110,.15); }
-.nav-logo { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:1px; }
+.nav-logo { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--gold); letter-spacing:1px; text-decoration:none; }
 .nav-logo span { color:var(--white); font-weight:400; }
 .nav-links { display:flex; gap:32px; align-items:center; }
 .nav-links a { color:rgba(255,255,255,.7); text-decoration:none; font-size:14px; font-weight:500; transition:all .3s; position:relative; }
 .nav-links a:hover { color:var(--gold); }
 .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1.5px; background:var(--gold); transition:width .3s; }
 .nav-links a:hover::after { width:100%; }
-.nav-cta { padding:10px 24px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-block; }
+.nav-cta { padding:10px 24px; background:linear-gradient(135deg, var(--gold), #b8944f); color:var(--navy); border:none; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .3s; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
 .nav-cta:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(201,169,110,.3); }
+.nav-cta.outline { background:transparent; border:1.5px solid rgba(255,255,255,.2); color:var(--white); }
+.nav-cta.outline:hover { border-color:var(--gold); color:var(--gold); }
+.nav-user { display:flex; align-items:center; gap:10px; cursor:pointer; text-decoration:none; }
+.nav-user-avatar { width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); }
+.nav-user-name { font-size:13px; font-weight:600; color:var(--white); max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .nav-hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
 .nav-hamburger span { width:24px; height:2px; background:var(--white); transition:all .3s; }
 
@@ -185,12 +190,12 @@ body { font-family:'Inter',sans-serif; color:var(--white); background:var(--navy
 <!-- Navbar -->
 <nav class="nav" id="navbar">
   <a href="index.html" class="nav-logo">Wed<span>Invite</span></a>
-  <div class="nav-links">
+  <div class="nav-links" id="navLinks">
     <a href="index.html#features">Fitur</a>
     <a href="index.html#templates">Template</a>
     <a href="index.html#pricing">Harga</a>
     <a href="help.html">Bantuan</a>
-    <a href="dashboard.html" class="nav-cta">Dashboard</a>
+    <a href="auth.html" class="nav-cta" id="navCta">Masuk</a>
   </div>
   <div class="nav-hamburger" onclick="toggleMobileMenu()">
     <span></span><span></span><span></span>
@@ -204,7 +209,7 @@ body { font-family:'Inter',sans-serif; color:var(--white); background:var(--navy
     <h1 class="hero-title">Buat Undangan Pernikahan <em>Eksklusif</em> dalam Hitungan Menit</h1>
     <p class="hero-subtitle">Desain elegan dengan tema Royal Navy Gold. Bagikan momen bahagia Anda dengan cara yang modern, praktis, dan berkesan.</p>
     <div class="hero-cta-group">
-      <a href="create-invitation.html" class="hero-cta-primary">✨ Buat Undangan Gratis</a>
+      <a href="create-invitation.html" class="hero-cta-primary" id="heroCtaPrimary">✨ Buat Undangan Gratis</a>
       <a href="index.html#templates" class="hero-cta-secondary">Lihat Template</a>
     </div>
   </div>
@@ -405,7 +410,7 @@ body { font-family:'Inter',sans-serif; color:var(--white); background:var(--navy
   <div class="cta-content">
     <h2 class="cta-title">Siap Membuat Undangan Anda?</h2>
     <p class="cta-subtitle">Mulai dari gratis. Upgrade kapan saja. Tanpa kartu kredit diperlukan untuk mencoba.</p>
-    <a href="create-invitation.html" class="cta-btn">✨ Buat Undangan Sekarang</a>
+    <a href="create-invitation.html" class="cta-btn" id="ctaBtn">✨ Buat Undangan Sekarang</a>
   </div>
 </section>
 
@@ -458,6 +463,58 @@ body { font-family:'Inter',sans-serif; color:var(--white); background:var(--navy
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
 });
+
+// ===== AUTH STATE CHECK =====
+function checkAuthState() {
+  const user = localStorage.getItem('wedinvite_user');
+  const navLinks = document.getElementById('navLinks');
+  const heroCta = document.getElementById('heroCtaPrimary');
+  const ctaBtn = document.getElementById('ctaBtn');
+
+  if (user) {
+    const u = JSON.parse(user);
+    // Navbar: show user avatar + dashboard link
+    navLinks.innerHTML = `
+      <a href="index.html#features">Fitur</a>
+      <a href="index.html#templates">Template</a>
+      <a href="index.html#pricing">Harga</a>
+      <a href="help.html">Bantuan</a>
+      <a href="dashboard.html" class="nav-user" title="Ke Dashboard">
+        <img src="${u.avatar}" alt="${u.name}" class="nav-user-avatar">
+        <span class="nav-user-name">${u.name.split(' ')[0]}</span>
+      </a>
+    `;
+    // Hero CTA: go to dashboard
+    if (heroCta) {
+      heroCta.href = 'dashboard.html';
+      heroCta.textContent = '📋 Dashboard Saya';
+    }
+    if (ctaBtn) {
+      ctaBtn.href = 'create-invitation.html';
+      ctaBtn.textContent = '✨ Buat Undangan Baru';
+    }
+  } else {
+    // Not logged in: show login button
+    navLinks.innerHTML = `
+      <a href="index.html#features">Fitur</a>
+      <a href="index.html#templates">Template</a>
+      <a href="index.html#pricing">Harga</a>
+      <a href="help.html">Bantuan</a>
+      <a href="auth.html" class="nav-cta">Masuk</a>
+    `;
+    // Hero CTA: redirect to auth first
+    if (heroCta) {
+      heroCta.href = 'auth.html?redirect=create-invitation.html';
+      heroCta.textContent = '✨ Buat Undangan Gratis';
+    }
+    if (ctaBtn) {
+      ctaBtn.href = 'auth.html?redirect=create-invitation.html';
+      ctaBtn.textContent = '✨ Buat Undangan Sekarang';
+    }
+  }
+}
+
+checkAuthState();
 </script>
 
 </body>

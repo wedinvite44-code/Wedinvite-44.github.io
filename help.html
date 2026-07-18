@@ -102,5 +102,23 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
   </div>
 </div>
 
+
+<script>
+function checkAuthState() {
+  const user = localStorage.getItem('wedinvite_user');
+  const topbar = document.querySelector('.topbar');
+  if (!topbar) return;
+  // Add dashboard link if logged in
+  if (user) {
+    const u = JSON.parse(user);
+    const backLink = topbar.querySelector('.topbar-back');
+    if (backLink) {
+      backLink.href = 'dashboard.html';
+      backLink.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Dashboard`;
+    }
+  }
+}
+window.addEventListener('DOMContentLoaded', checkAuthState);
+</script>
 </body>
 </html>

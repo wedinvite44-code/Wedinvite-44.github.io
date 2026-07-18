@@ -58,6 +58,27 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
 </style>
 </head>
 <body>
+<script>
+// ===== AUTH CHECK =====
+function checkAuth() {
+  const user = localStorage.getItem('wedinvite_user');
+  if (!user) {
+    window.location.href = 'auth.html?redirect=settings.html';
+    return;
+  }
+  const u = JSON.parse(user);
+  // Fill user data into form
+  const fullNameInput = document.getElementById('fullName');
+  const emailInput = document.getElementById('email');
+  const phoneInput = document.getElementById('phone');
+  if (fullNameInput) fullNameInput.value = u.name || '';
+  if (emailInput) emailInput.value = u.email || '';
+  if (phoneInput && u.phone) phoneInput.value = u.phone;
+}
+// Run after DOM loaded
+window.addEventListener('DOMContentLoaded', checkAuth);
+</script>
+
 
 <div class="topbar">
   <a href="editor.html" class="topbar-back">
@@ -152,6 +173,11 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 function saveSettings() {
+  const user = JSON.parse(localStorage.getItem('wedinvite_user') || '{}');
+  user.name = document.getElementById('fullName').value;
+  user.email = document.getElementById('email').value;
+  user.phone = document.getElementById('phone').value;
+  localStorage.setItem('wedinvite_user', JSON.stringify(user));
   showToast('✅ Pengaturan berhasil disimpan!');
 }
 </script>

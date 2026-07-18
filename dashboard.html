@@ -25,10 +25,15 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
 .sidebar-item svg { width:20px; height:20px; flex-shrink:0; }
 .sidebar-divider { height:1px; background:rgba(255,255,255,.05); margin:16px; }
 .sidebar-bottom { padding:0 24px; }
-.sidebar-user { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:rgba(201,169,110,.05); border:1px solid rgba(201,169,110,.1); }
-.sidebar-user-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--gold), #b8944f); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:var(--navy); }
+.sidebar-user { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:rgba(201,169,110,.05); border:1px solid rgba(201,169,110,.1); cursor:pointer; transition:all .3s; }
+.sidebar-user:hover { border-color:var(--gold); }
+.sidebar-user-avatar { width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); }
+.sidebar-user-initial { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--gold), #b8944f); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:var(--navy); }
 .sidebar-user-name { font-size:13px; font-weight:600; color:var(--white); }
 .sidebar-user-plan { font-size:11px; color:var(--gold); }
+.sidebar-logout { display:flex; align-items:center; gap:12px; padding:10px 16px; border-radius:10px; color:var(--error); text-decoration:none; font-size:13px; font-weight:600; transition:all .3s; margin-top:8px; cursor:pointer; border:none; background:none; width:100%; font-family:'Inter',sans-serif; }
+.sidebar-logout:hover { background:rgba(239,68,68,.1); }
+.sidebar-logout svg { width:18px; height:18px; flex-shrink:0; }
 
 /* ============ MAIN CONTENT ============ */
 .main { margin-left:260px; min-height:100vh; }
@@ -122,13 +127,18 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
     </a>
   </nav>
   <div class="sidebar-bottom">
-    <div class="sidebar-user">
-      <div class="sidebar-user-avatar">IP</div>
+    <div class="sidebar-user" onclick="location.href='settings.html'">
+      <img src="" alt="Avatar" class="sidebar-user-avatar" id="sidebarAvatar" style="display:none;">
+      <div class="sidebar-user-initial" id="sidebarInitial">IP</div>
       <div>
-        <div class="sidebar-user-name">Ican Pratama</div>
+        <div class="sidebar-user-name" id="sidebarUserName">Ican Pratama</div>
         <div class="sidebar-user-plan">⭐ Premium</div>
       </div>
     </div>
+    <button class="sidebar-logout" onclick="handleLogout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Keluar
+    </button>
   </div>
 </aside>
 
@@ -222,6 +232,35 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
     </div>
   </div>
 </main>
+
+<script>
+// ===== AUTH CHECK =====
+function checkAuth() {
+  const user = localStorage.getItem('wedinvite_user');
+  if (!user) {
+    window.location.href = 'auth.html?redirect=dashboard.html';
+    return;
+  }
+  const u = JSON.parse(user);
+  // Update sidebar user info
+  const nameEl = document.getElementById('sidebarUserName');
+  const avatarEl = document.getElementById('sidebarAvatar');
+  const initialEl = document.getElementById('sidebarInitial');
+  if (nameEl) nameEl.textContent = u.name;
+  if (avatarEl && u.avatar) {
+    avatarEl.src = u.avatar;
+    avatarEl.style.display = 'block';
+    if (initialEl) initialEl.style.display = 'none';
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem('wedinvite_user');
+  window.location.href = 'index.html';
+}
+
+checkAuth();
+</script>
 
 </body>
 </html>

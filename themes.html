@@ -174,5 +174,29 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white
   </div>
 </div>
 
+
+<script>
+// ===== AUTH STATE =====
+function checkAuthState() {
+  const user = localStorage.getItem('wedinvite_user');
+  const topbar = document.querySelector('.topbar');
+  if (!topbar) return;
+
+  // Find the "+ Buat Baru" link
+  const createLink = topbar.querySelector('a[href="create-invitation.html"]');
+  if (user) {
+    const u = JSON.parse(user);
+    if (createLink) {
+      createLink.style.display = 'flex';
+    }
+  } else {
+    // If not logged in, redirect create-invitation to auth
+    if (createLink) {
+      createLink.href = 'auth.html?redirect=create-invitation.html';
+    }
+  }
+}
+window.addEventListener('DOMContentLoaded', checkAuthState);
+</script>
 </body>
 </html>
