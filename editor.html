@@ -16,7 +16,7 @@
 body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--navy); min-height:100vh; }
 
 /* ============ EDITOR TOPBAR ============ */
-.ed-topbar { background:rgba(10,10,26,.95); backdrop-filter:blur(20px); padding:12px 24px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; border-bottom:1px solid rgba(201,169,110,.15); }
+.ed-topbar { background:rgba(10,10,26,.95); backdrop-filter:blur(20px); padding:12px 24px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; border-bottom:1px solid rgba(201,169,110,.15); max-width:480px; margin:0 auto; left:0; right:0; }
 .ed-topbar-back { display:flex; align-items:center; gap:8px; text-decoration:none; color:var(--white); font-size:14px; font-weight:600; transition:color .3s; }
 .ed-topbar-back:hover { color:var(--gold); }
 .ed-topbar-back svg { width:20px; height:20px; }
@@ -208,6 +208,25 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--navy)
 </style>
 </head>
 <body>
+<script>
+// ===== AUTH CHECK =====
+function checkAuth() {
+  const user = localStorage.getItem('wedinvite_user');
+  if (!user) {
+    window.location.href = 'auth.html?redirect=editor.html';
+    return;
+  }
+  const u = JSON.parse(user);
+  const topbarUser = document.getElementById('topbarUser');
+  const topbarAvatar = document.getElementById('topbarAvatar');
+  if (topbarUser && topbarAvatar) {
+    topbarAvatar.src = u.avatar;
+    topbarUser.style.display = 'flex';
+  }
+}
+checkAuth();
+</script>
+
 
 <!-- Toast -->
 <div class="ed-toast" id="toast"></div>
@@ -219,10 +238,12 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--navy)
     Dashboard
   </a>
   <div class="ed-topbar-title">Editor Undangan</div>
-  <div id="themeBadge" style="padding:6px 14px; background:rgba(201,169,110,.15); border:1px solid rgba(201,169,110,.3); border-radius:50px; font-size:12px; color:var(--gold); font-weight:600; display:flex; align-items:center; gap:6px;">🎨 <span id="themeName">Royal Navy Gold</span></div>
   <div class="ed-topbar-actions">
     <a href="invitation.html" target="_blank" class="ed-topbar-btn outline">👁 Pratinjau</a>
     <button class="ed-topbar-btn" onclick="saveInvitation()">💾 Simpan</button>
+    <a href="settings.html" class="ed-topbar-user" id="topbarUser" style="display:none;">
+      <img src="" alt="User" class="ed-topbar-user-avatar" id="topbarAvatar">
+    </a>
   </div>
 </div>
 
@@ -528,146 +549,6 @@ body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--navy)
 <input type="file" id="fileInputGallery" accept="image/*" style="display:none" onchange="handleGalleryUpload(this)">
 
 <script>
-// ===== THEME SWITCHER =====
-const urlParams = new URLSearchParams(window.location.search);
-const currentTheme = urlParams.get('theme') || 'royal-navy-gold';
-
-function applyTheme(theme) {
-  const root = document.documentElement;
-  const preview = document.getElementById('invitationPreview');
-
-  if (theme === 'rustic-garden') {
-    // Override CSS variables for rustic theme
-    root.style.setProperty('--navy', '#4a5d48');
-    root.style.setProperty('--navy-light', '#5c6b56');
-    root.style.setProperty('--navy-mid', '#6b7c65');
-    root.style.setProperty('--gold', '#c67b5c');
-    root.style.setProperty('--gold-light', '#e8a87c');
-    root.style.setProperty('--gold-bright', '#d4a574');
-    root.style.setProperty('--cream', '#f5f0e6');
-    root.style.setProperty('--gray', '#7a7a6a');
-
-    // Update opening background
-    const opening = document.querySelector('.ed-opening');
-    if (opening) {
-      opening.style.background = "linear-gradient(180deg, rgba(74,93,72,.5) 0%, rgba(74,93,72,.85) 100%), url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=80')";
-      opening.style.backgroundSize = 'cover';
-      opening.style.backgroundPosition = 'center';
-    }
-
-    // Update couple section background
-    const couple = document.querySelector('.ed-couple');
-    if (couple) couple.style.background = '#faf8f3';
-
-    // Update quote section
-    const quote = document.querySelector('.ed-quote');
-    if (quote) quote.style.background = 'linear-gradient(180deg, #f0ebe0 0%, #e8e2d5 100%)';
-
-    // Update event section
-    const event = document.querySelector('.ed-event');
-    if (event) event.style.background = 'linear-gradient(180deg, #faf8f3 0%, #f0ebe0 100%)';
-
-    // Update gallery section
-    const gallery = document.querySelector('.ed-gallery');
-    if (gallery) gallery.style.background = '#faf8f3';
-
-    // Update RSVP section
-    const rsvp = document.querySelector('.ed-rsvp');
-    if (rsvp) rsvp.style.background = 'linear-gradient(180deg, #f0ebe0 0%, #e8e2d5 100%)';
-
-    // Update gift section
-    const gift = document.querySelector('.ed-gift');
-    if (gift) gift.style.background = '#faf8f3';
-
-    // Update closing section
-    const closing = document.querySelector('.ed-closing');
-    if (closing) {
-      closing.style.background = 'linear-gradient(180deg, #4a5d48 0%, #5c6b56 100%)';
-    }
-
-    // Update footer
-    const footer = document.querySelector('.ed-footer');
-    if (footer) {
-      footer.style.background = '#4a5d48';
-      footer.style.color = 'rgba(255,255,255,.6)';
-    }
-
-    // Update music button
-    const musicBtn = document.getElementById('musicBtn');
-    if (musicBtn) musicBtn.style.background = 'linear-gradient(135deg, #c67b5c, #a65d3e)';
-
-    // Update preview border
-    if (preview) preview.style.background = '#faf8f3';
-
-    showToast('🌿 Tema Rustic Garden diterapkan!');
-  } else {
-    if (themeName) themeName.textContent = 'Royal Navy Gold';
-    if (themeBadge) {
-      themeBadge.style.background = 'rgba(201,169,110,.15)';
-      themeBadge.style.borderColor = 'rgba(201,169,110,.3)';
-      themeBadge.style.color = '#c9a96e';
-    }
-    // Reset to Royal Navy Gold (default CSS variables)
-    root.style.setProperty('--navy', '#0a0a1a');
-    root.style.setProperty('--navy-light', '#141428');
-    root.style.setProperty('--navy-mid', '#1e1e3f');
-    root.style.setProperty('--gold', '#c9a96e');
-    root.style.setProperty('--gold-light', '#e8d5b0');
-    root.style.setProperty('--gold-bright', '#f0d78c');
-    root.style.setProperty('--cream', '#faf7f2');
-    root.style.setProperty('--gray', '#8a8a9a');
-
-    const opening = document.querySelector('.ed-opening');
-    if (opening) {
-      opening.style.background = "linear-gradient(180deg, rgba(10,10,26,.6) 0%, rgba(10,10,26,.85) 100%), url('https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80')";
-      opening.style.backgroundSize = 'cover';
-      opening.style.backgroundPosition = 'center';
-    }
-
-    const couple = document.querySelector('.ed-couple');
-    if (couple) couple.style.background = '#fff';
-
-    const quote = document.querySelector('.ed-quote');
-    if (quote) quote.style.background = 'linear-gradient(180deg, #fff9f0 0%, #fff5e6 100%)';
-
-    const event = document.querySelector('.ed-event');
-    if (event) event.style.background = 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)';
-
-    const gallery = document.querySelector('.ed-gallery');
-    if (gallery) gallery.style.background = '#fff';
-
-    const rsvp = document.querySelector('.ed-rsvp');
-    if (rsvp) rsvp.style.background = 'linear-gradient(180deg, #fff9f0 0%, #fff5e6 100%)';
-
-    const gift = document.querySelector('.ed-gift');
-    if (gift) gift.style.background = '#fff';
-
-    const closing = document.querySelector('.ed-closing');
-    if (closing) closing.style.background = 'linear-gradient(180deg, #0a0a1a 0%, #1e1e3f 100%)';
-
-    const footer = document.querySelector('.ed-footer');
-    if (footer) {
-      footer.style.background = '#0a0a1a';
-      footer.style.color = '#8a8a9a';
-    }
-
-    const musicBtn = document.getElementById('musicBtn');
-    if (musicBtn) musicBtn.style.background = 'linear-gradient(135deg, #c9a96e, #b8944f)';
-
-    if (preview) preview.style.background = '#fff';
-  }
-}
-
-// Apply theme on load
-if (currentTheme) {
-  // Small delay to ensure DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => applyTheme(currentTheme));
-  } else {
-    applyTheme(currentTheme);
-  }
-}
-
 // ===== TOAST =====
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -894,7 +775,11 @@ function copyRek(id, e) {
 }
 
 // ===== THEME =====
-// Theme is handled by applyTheme() above
+const urlParams = new URLSearchParams(window.location.search);
+const theme = urlParams.get('theme');
+if (theme) {
+  console.log('Theme selected:', theme);
+}
 </script>
 
 </body>
